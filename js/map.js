@@ -124,4 +124,5 @@ var directionDisplay;
     } else {
       handleNoGeolocation(false);
     }
+    map.setZoom(15);
   }
