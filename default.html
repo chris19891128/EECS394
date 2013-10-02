@@ -11,27 +11,8 @@
         <script src="js/map.js"></script>
     </head>
     <body onload="initialize()" style="font-family: sans-serif;">
-      <table style="width: 400px">
-        <tr>
-          <td><input type="checkbox" id="optimize" checked />Optimize</td>
-          <td>
-            <select id="mode" onchange="updateMode()">
-              <option value="bicycling">Bicycling</option>
-              <option value="driving">Driving</option>
-              <option value="walking">Walking</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="highways" checked />Avoid highways</td>
-          <td><input type="button" value="Reset" onclick="reset()" /></td>
-        </tr>
-        <tr>
-          <td><input type="checkbox" id="tolls" checked />Avoid tolls</td>
-          <td><input type="button" value="Get Directions!" onclick="calcRoute()" /></td>
-          <td></td>
-        </tr>
-      </table>
+      <input type="button" value="Reset" onclick="reset()" />
+      <input type="button" value="Get Directions!" onclick="calcRoute()" />
       <div style="position:relative; border: 1px; width: 610px; height: 400px;">
         <div id="map_canvas" style="border: 1px solid black; position:absolute; width:398px; height:398px"></div>
         <div id="directionsPanel" style="position:absolute; left: 410px; width:240px; height:400px; overflow: auto"></div>

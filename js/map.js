@@ -6,35 +6,40 @@ var directionDisplay;
   var waypoints = [];
   var markers = [];
   var directionsVisible = false;
+  var gTime;
 
   function initialize() {
     directionsDisplay = new google.maps.DirectionsRenderer();
-    var chicago = new google.maps.LatLng(37.7749295, -122.4194155);
+    var nuCampus = new google.maps.LatLng(42.053483, -87.676631);
     var myOptions = {
-      zoom:13,
+      zoom:15,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
-      center: chicago
+      center: nuCampus
     }
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById("directionsPanel"));
     
-    google.maps.event.addListener(map, 'click', function(event) {
-      if (origin == null) {
-        origin = event.latLng;
+
+    //Get Current Location "origin"
+    if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        origin = new google.maps.LatLng(position.coords.latitude,
+                                         position.coords.longitude);
+        map.setCenter(origin);
         addMarker(origin);
-      } else if (destination == null) {
-        destination = event.latLng;
-        addMarker(destination);
-      } else {
-        if (waypoints.length < 9) {
-          waypoints.push({ location: destination, stopover: true });
-          destination = event.latLng;
-          addMarker(destination);
-        } else {
-          alert("Maximum number of waypoints reached");
-        }
-      }
+      }, function() {
+        handleNoGeolocation(true);
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      handleNoGeolocation(false);
+    }
+
+    //Get Target Location "destination"
+    google.maps.event.addListener(map, 'click', function(event) {
+      destination = event.latLng;
+      addMarker(destination);
     });
   }
 
@@ -57,32 +62,20 @@ var directionDisplay;
       return;
     }
     
-    var mode;
-    switch (document.getElementById("mode").value) {
-      case "bicycling":
-        mode = google.maps.DirectionsTravelMode.BICYCLING;
-        break;
-      case "driving":
-        mode = google.maps.DirectionsTravelMode.DRIVING;
-        break;
-      case "walking":
-        mode = google.maps.DirectionsTravelMode.WALKING;
-        break;
-    }
+    var mode = google.maps.DirectionsTravelMode.WALKING;
     
     var request = {
         origin: origin,
         destination: destination,
         waypoints: waypoints,
         travelMode: mode,
-        optimizeWaypoints: document.getElementById('optimize').checked,
-        avoidHighways: document.getElementById('highways').checked,
-        avoidTolls: document.getElementById('tolls').checked
+        optimizeWaypoints: true,
     };
     
     directionsService.route(request, function(response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
+        console.log(response.routes[0].legs[0].duration.value);
       }
     });
     
