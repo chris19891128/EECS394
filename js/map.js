@@ -29,11 +29,20 @@
 
   }
 
+  function addBlueMarker(loc){
+    markers.push(new google.maps.Marker({
+      position: loc,
+      map: map,
+      icon: "http://maps.google.com/mapfiles/marker" + String.fromCharCode(10 + 65) + ".png"
+    }));
+
+  }
 
   function trackRoutine(){
     setInterval(function(){
       var nextLoc = getCurrentLocation();
       alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());		
+      addBlueMarker(nextLoc);
       curSpeed = calDistance(curLoc.lat(), nextLoc.lat(), curLoc.lng(), nextLoc.lng()) / updateInterval;
       alert("Now you are travelling in speed of " + curSpeed + "m/s");
       curLoc = nextLoc;
