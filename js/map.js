@@ -147,4 +147,18 @@
     directionsDisplay = new google.maps.DirectionsRenderer();
     directionsDisplay.setMap(map);
     directionsDisplay.setPanel(document.getElementById("directionsPanel"));    
+  
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+          origin = new google.maps.LatLng(position.coords.latitude,
+                                          position.coords.longitude);
+          map.setCenter(origin);
+          addMarker(origin);
+      }, function() {
+          handleNoGeolocation(true);
+      });
+    } else {
+      handleNoGeolocation(false);
+    }
+    map.setZoom(15);
   }
