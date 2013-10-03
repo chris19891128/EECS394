@@ -28,6 +28,7 @@ alert("you don't have permission set");
 
 function getCurrentLocationFake(){
 
+<<<<<<< HEAD
 }
 
 function trackRoutine(){
@@ -40,6 +41,28 @@ function trackRoutine(){
   }, updateInterval * 1000);
    
 }  
+=======
+  function addBlueMarker(loc){
+    markers.push(new google.maps.Marker({
+      position: loc,
+      map: map,
+      icon: "http://maps.google.com/mapfiles/marker" + String.fromCharCode(10 + 65) + ".png"
+    }));
+
+  }
+
+  function trackRoutine(){
+    setInterval(function(){
+      var nextLoc = getCurrentLocation();
+      alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());		
+      addBlueMarker(nextLoc);
+      curSpeed = calDistance(curLoc.lat(), nextLoc.lat(), curLoc.lng(), nextLoc.lng()) / updateInterval;
+      alert("Now you are travelling in speed of " + curSpeed + "m/s");
+      curLoc = nextLoc;
+    }, updateInterval * 1000);
+     
+  }  
+>>>>>>> b7637e6a109a8e4aab978436b21f66a11d55aa36
 
 function initialize() {
   directionsDisplay = new google.maps.DirectionsRenderer();
