@@ -7,11 +7,31 @@
         <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link rel="stylesheet" href="css/font-awesome.min.css">
         <link rel="stylesheet" href="map.css">
-	<script src="js/math.js"></script>
+	<script>
+var options = {
+  enableHighAccuracy: true,
+  timeout: 10000,
+  maximumAge: 0
+};
+
+function success(pos) {
+  var crd = pos.coords;
+
+  console.log('Your current position is:');
+  console.log('Latitude : ' + crd.latitude);
+  console.log('Longitude: ' + crd.longitude);
+  console.log('More or less ' + crd.accuracy + ' meters.');
+};
+
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+};
+setInterval(function(){
+navigator.geolocation.getCurrentPosition(success, error, options)}
+,10000);
+
+</script>
     </head>
     <body>
-    	<script>
-		document.write("Distance between them is " + calDistance(41.934977,41.934970,-87.738648,-87.738648));
-    	</script>
     </body>
 </html>
