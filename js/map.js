@@ -6,7 +6,8 @@ var directionDisplay;
   var waypoints = [];
   var markers = [];
   var directionsVisible = false;
-  var gTime;
+  var gTime = 0;
+  var tTime = 0;
 
   function initialize() {
     directionsDisplay = new google.maps.DirectionsRenderer();
@@ -64,6 +65,9 @@ var directionDisplay;
     
     var mode = google.maps.DirectionsTravelMode.WALKING;
     
+    var tTime = document.getElementById("time").value;
+    console.log(tTime);
+
     var request = {
         origin: origin,
         destination: destination,
@@ -75,7 +79,7 @@ var directionDisplay;
     directionsService.route(request, function(response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
-        console.log(response.routes[0].legs[0].duration.value);
+        document.getElementById("info").innerHTML="Google Time: " + response.routes[0].legs[0].duration.value + " secs";
       }
     });
     
