@@ -1,4 +1,4 @@
-var directionDisplay;
+  var directionDisplay;
   var directionsService = new google.maps.DirectionsService();
   var map;
   var origin = null;
@@ -6,9 +6,46 @@ var directionDisplay;
   var waypoints = [];
   var markers = [];
   var directionsVisible = false;
+<<<<<<< HEAD
   var gTime = 0;
   var tTime = 0;
+=======
+  var gTime;
+  var updateInterval = 3;	// in s
+  var curSpeed;			// in m/s
+  var curLoc;
+>>>>>>> 4f32f2634712a293bbe7da3f3e8522b6a792e242
 
+  function getCurrentLocation(){
+   // if(navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var loc = new google.maps.LatLng(position.coords.latitude,
+                                         position.coords.longitude);
+        alert("current location " + loc.lat() + " " + loc.lng());
+	return loc;
+      }, function() {
+	alert("you don't have permission set");	
+      });
+ //   }
+  }
+
+  function getCurrentLocationFake(){
+
+  }
+
+
+  function trackRoutine(){
+    setInterval(function(){
+      var nextLoc = getCurrentLocation();
+      alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());		
+      curSpeed = calDistance(curLoc.lat(), nextLoc.lat(), curLoc.lng(), nextLoc.lng()) / updateInterval;
+      alert("Now you are travelling in speed of " + curSpeed + "m/s");
+      curLoc = nextLoc;
+    }, updateInterval * 1000);
+     
+  }  
+
+  
   function initialize() {
     directionsDisplay = new google.maps.DirectionsRenderer();
     var nuCampus = new google.maps.LatLng(42.053483, -87.676631);
@@ -23,7 +60,7 @@ var directionDisplay;
     
 
     //Get Current Location "origin"
-    if(navigator.geolocation) {
+//    if(navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(function(position) {
         origin = new google.maps.LatLng(position.coords.latitude,
                                          position.coords.longitude);
@@ -32,16 +69,19 @@ var directionDisplay;
       }, function() {
         handleNoGeolocation(true);
       });
-    } else {
+//    } else {
       // Browser doesn't support Geolocation
-      handleNoGeolocation(false);
-    }
+//      handleNoGeolocation(false);
+//    }
 
     //Get Target Location "destination"
     google.maps.event.addListener(map, 'click', function(event) {
       destination = event.latLng;
       addMarker(destination);
     });
+
+    //Run the routine of position update in separate thread
+    setTimeout(trackRoutine, 0);
   }
 
   function addMarker(latlng) {
