@@ -13,58 +13,49 @@ var updateInterval = 3;	// in s
 var curSpeed;			// in m/s
 var curLoc;
 
+/*
 function getCurrentLocation(){
  // if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
+    return navigator.geolocation.getCurrentPosition(function(position) {
       var loc = new google.maps.LatLng(position.coords.latitude,
                                        position.coords.longitude);
       alert("current location " + loc.lat() + " " + loc.lng());
-return loc;
+      return loc;
     }, function() {
-alert("you don't have permission set");	
+      alert("you don't have permission set");
+      return null;      
     });
 //   }
-}
-
-function getCurrentLocationFake(){
-
-<<<<<<< HEAD
+}*/
+ 
+function addBlueMarker(loc){
+  markers.push(new google.maps.Marker({
+  position: loc,
+  map: map,
+  icon: "http://maps.google.com/mapfiles/marker" + String.fromCharCode(10 + 65) + ".png"
+  }));
 }
 
 function trackRoutine(){
   setInterval(function(){
-    var nextLoc = getCurrentLocation();
-    alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());		
-    curSpeed = calDistance(curLoc.lat(), nextLoc.lat(), curLoc.lng(), nextLoc.lng()) / updateInterval;
-    alert("Now you are travelling in speed of " + curSpeed + "m/s");
-    curLoc = nextLoc;
-  }, updateInterval * 1000);
-   
-}  
-=======
-  function addBlueMarker(loc){
-    markers.push(new google.maps.Marker({
-      position: loc,
-      map: map,
-      icon: "http://maps.google.com/mapfiles/marker" + String.fromCharCode(10 + 65) + ".png"
-    }));
-
-  }
-
-  function trackRoutine(){
-    setInterval(function(){
-      var nextLoc = getCurrentLocation();
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var nextLoc = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());		
       addBlueMarker(nextLoc);
       curSpeed = calDistance(curLoc.lat(), nextLoc.lat(), curLoc.lng(), nextLoc.lng()) / updateInterval;
       alert("Now you are travelling in speed of " + curSpeed + "m/s");
       curLoc = nextLoc;
-    }, updateInterval * 1000);
-     
-  }  
->>>>>>> b7637e6a109a8e4aab978436b21f66a11d55aa36
+    }, function() {
+      alert("you don't have permission set");
+    })
+  }, updateInterval * 1000);
+}  
+
 
 function initialize() {
+  if(navigator.userAgent.match(/Android/i)){
+    window.scrollTo(0,1);
+  }
   directionsDisplay = new google.maps.DirectionsRenderer();
   var nuCampus = new google.maps.LatLng(42.053483, -87.676631);
   var myOptions = {
@@ -84,6 +75,7 @@ function initialize() {
                                        position.coords.longitude);
       map.setCenter(origin);
       addMarker(origin);
+      curLoc = origin;
     }, function() {
       handleNoGeolocation(true);
     });
