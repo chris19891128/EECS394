@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bootstrap 101 Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+        <link rel="stylesheet" href="map.css">
+	<script>
+var options = {
+  enableHighAccuracy: true,
+  timeout: 10000,
+  maximumAge: 0
+};
+
+function success(pos) {
+  var crd = pos.coords;
+
+  console.log('Your current position is:');
+  console.log('Latitude : ' + crd.latitude);
+  console.log('Longitude: ' + crd.longitude);
+  console.log('More or less ' + crd.accuracy + ' meters.');
+};
+
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+};
+setInterval(function(){
+navigator.geolocation.getCurrentPosition(success, error, options)}
+,10000);
+
+</script>
+    </head>
+    <body>
+    </body>
+</html>
