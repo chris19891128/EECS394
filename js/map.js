@@ -6,10 +6,15 @@
   var waypoints = [];
   var markers = [];
   var directionsVisible = false;
+<<<<<<< HEAD
+  var gTime = 0;
+  var tTime = 0;
+=======
   var gTime;
   var updateInterval = 3;	// in s
   var curSpeed;			// in m/s
   var curLoc;
+>>>>>>> 4f32f2634712a293bbe7da3f3e8522b6a792e242
 
   function getCurrentLocation(){
    // if(navigator.geolocation) {
@@ -100,6 +105,9 @@
     
     var mode = google.maps.DirectionsTravelMode.WALKING;
     
+    var tTime = document.getElementById("time").value;
+    console.log(tTime);
+
     var request = {
         origin: origin,
         destination: destination,
@@ -111,7 +119,7 @@
     directionsService.route(request, function(response, status) {
       if (status == google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
-        console.log(response.routes[0].legs[0].duration.value);
+        document.getElementById("info").innerHTML="Google Time: " + response.routes[0].legs[0].duration.value + " secs";
       }
     });
     
