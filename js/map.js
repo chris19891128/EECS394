@@ -40,7 +40,7 @@ function trackRoutine(){
   setInterval(function(){
     navigator.geolocation.getCurrentPosition(function(position) {
       var nextLoc = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());		
+      // alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());		
       addBlueMarker(nextLoc);
       curSpeed = calDistance(curLoc.lat(), nextLoc.lat(), curLoc.lng(), nextLoc.lng()) / updateInterval;
       alert("Now you are travelling in speed of " + curSpeed + "m/s");
