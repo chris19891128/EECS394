@@ -43,7 +43,7 @@ function trackRoutine(){
       // alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());		
       addBlueMarker(nextLoc);
       curSpeed = calDistance(curLoc.lat(), nextLoc.lat(), curLoc.lng(), nextLoc.lng()) / updateInterval;
-      alert("Now you are travelling in speed of " + curSpeed + "m/s");
+      // alert("Now you are travelling in speed of " + curSpeed + "m/s");
       curLoc = nextLoc;
     }, function() {
       alert("you don't have permission set");
