@@ -34,15 +34,15 @@ function success(position) {
 	var lng = position.coords.longitude;
 
 	console.log("Your position has changed to " + lat + " " + lng);
-	document.getElementById("info").innerHTML = "Your position has changed to"
-			+ lat + " " + lng;
+	info.empty().append("Your position has changed to"
+			+ lat + " " + lng);
 
 	if (curLoc != null) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng())
 		curSpeed = distance / updateInterval;
 		console.log("You are now walking at speed " + curSpeed + "m/s");
-		document.getElementById("info").innerHTML = "You are now walking at speed "
-				+ curSpeed + "m/s";
+		info.empty().append("You are now walking at speed "
+				+ curSpeed + "m/s");
 	}
 	curLoc = new google.maps.LatLng(lat, lng);
 
