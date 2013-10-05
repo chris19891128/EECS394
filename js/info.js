@@ -1,8 +1,7 @@
 function update(cSpeed, cTime, tTime, gTime) {
-	info.parent().toggle().siblings().toggle();
-	cTime = new Date();
-	tTime = new Date("2013-10-04T23:21:45.504Z");
-	gTime = 1000;
+//	cTime = new Date();
+//	tTime = new Date("2013-10-04T23:21:45.504Z");
+//	gTime = 1000;
 	var rTime = tTime.getMilliseconds() - cTime.getMilliseconds();
 	var i=0;
 	console.log(rTime);
@@ -18,4 +17,5 @@ function update(cSpeed, cTime, tTime, gTime) {
 		info.parent().addClass('ontime');
 		info.empty().append("Just keep up, you will be on time :)")
 	}
+	info.parent().toggle().siblings().toggle();
 }

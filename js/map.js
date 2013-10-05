@@ -10,10 +10,10 @@ var directionsVisible = false;
 var date = new Date();
 var cur_hour = 0;
 var cur_min = 0;
-var cTime = new Date();
-var gTime = new Date();
-var tTime = new Date();
-var rTime = new Date();
+var cTime = 0;
+var gTime = 0;
+var tTime = 0;
+var rTime = 0;
 var get_t_Time = new Date();
 var get_c_Time = new Date();
 var updateInterval = 3; // in s
@@ -131,21 +131,6 @@ function calcRoute() {
 
 	var mode = google.maps.DirectionsTravelMode.WALKING;
 
-	
-	console.log(tTime);
-	//alert("target time: " + tTime);
-	//alert("current time: " + cTime);
-	//alert(typeof tTime);
-	//alert(typeof cTime);
-	//alert("target time: " + tTime);
-	//alert("current time: " + cTime);
-	var gap = get_t_Time.getTime() - get_c_Time.getTime();
-	alert("time gap: " + (gap/1000));
-	//rTime = getrestTime(tTime, cTime);
-	//getrestTime(tTime, cTime);
-	//alert("rest Time: " + rTime);
-	console.log(cTime);
-
 	var request = {
 		origin : origin,
 		destination : destination,
@@ -157,15 +142,15 @@ function calcRoute() {
 	directionsService.route(request, function(response, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(response);
+			gTime = response.routes[0].legs[0].duration.value;
 			info.empty().append(
-					"Google Time: " + response.routes[0].legs[0].duration.value
-							+ " secs");
+					"Google Time: " + gTime + " secs");
 		}
 	});
 
 	clearMarkers();
 	directionsVisible = true;
-	info.parent().toggle().siblings().toggle();
+	update(0,get_c_Time,get_t_Time,gTime)
 }
 
 function updateMode() {
@@ -230,12 +215,8 @@ function setTime(time)
 	time_array = time.split(":");
 	var tar_hour = time_array[0];
 	var tar_min = time_array[1];
-	alert("tar hour: " + tar_hour);
-	alert("tar min: " + tar_min);
 	var TTime = new Date();
 	TTime.setHours(time_array[0],time_array[1]);
-	alert(TTime);
-	alert(typeof TTime);
 	return TTime;
 }
 	
