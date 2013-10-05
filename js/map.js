@@ -6,9 +6,15 @@ var destination = null;
 var waypoints = [];
 var markers = [];
 var directionsVisible = false;
-var cTime = 0;
-var gTime = 0;
-var tTime = 0;
+var date = new Date();
+var cur_hour = 0;
+var cur_min = 0;
+var cTime = new Date();
+var gTime = new Date();
+var tTime = new Date();
+var rTime = new Date();
+var get_t_Time = new Date();
+var get_c_Time = new Date();
 var updateInterval = 3; // in s
 var curSpeed; // in m/s
 var curLoc;
@@ -101,6 +107,15 @@ function addMarker(latlng) {
 
 function calcRoute() {
 	alert("you click the go!");
+	tTime = document.getElementById("time").value;
+	cTime = getCurrentTime();
+	get_t_Time = setTime(tTime);
+	get_c_Time = setTime(cTime);
+	
+	if (get_t_Time<=get_c_Time)
+	{
+		alert("target time is less than current time!");
+	}
 	if (origin == null) {
 		alert("Click on the map to add a start point");
 		return;
@@ -113,9 +128,19 @@ function calcRoute() {
 
 	var mode = google.maps.DirectionsTravelMode.WALKING;
 
-	var tTime = document.getElementById("time").value;
+	
 	console.log(tTime);
-	var cTime = getCurrentTime();
+	//alert("target time: " + tTime);
+	//alert("current time: " + cTime);
+	//alert(typeof tTime);
+	//alert(typeof cTime);
+	//alert("target time: " + tTime);
+	//alert("current time: " + cTime);
+	var gap = get_t_Time.getTime() - get_c_Time.getTime();
+	alert("time gap: " + (gap/1000));
+	//rTime = getrestTime(tTime, cTime);
+	//getrestTime(tTime, cTime);
+	//alert("rest Time: " + rTime);
 	console.log(cTime);
 
 	var request = {
@@ -184,10 +209,27 @@ function reset_all() {
 }
 
 function getCurrentTime() {
-	var date = new Date();
-	var time = date.toLocaleTimeString();
+	cur_hour = date.getHours();
+	cur_min = date.getMinutes();
+	var time = cur_hour+":"+cur_min;
 	return time;
 }
+
+function setTime(time)
+{
+	var time_array = new Array();
+	time_array = time.split(":");
+	var tar_hour = time_array[0];
+	var tar_min = time_array[1];
+	alert("tar hour: " + tar_hour);
+	alert("tar min: " + tar_min);
+	var TTime = new Date();
+	TTime.setHours(time_array[0],time_array[1]);
+	alert(TTime);
+	alert(typeof TTime);
+	return TTime;
+}
+	
 
 function vibration_slow() {
 	// var supportsVibrate = "vibrate" in navigator;
