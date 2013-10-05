@@ -71,8 +71,7 @@ function addMarker(latlng) {
 
 function calcRoute() {
   if (origin == null) {
-    alert("Click on the map to add a start point");
-    return;
+    origin = curLoc;
   }
   
   if (destination == null) {
