@@ -8,21 +8,30 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" href="css/font-awesome.min.css">
 <link rel="stylesheet" href="css/map.css">
-<script
-	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
-<script src="js/math.js"></script>
-<script src="js/map.js"></script>
 </head>
 <body onload="initialize()" style="font-family: sans-serif;">
+	<div id="ui">
+		<form class="form-inline" role="form" id="input">
+			Arrive at: <input type="time" value="" id="time" />
+			<button type="button" class="btn btn-default" onclick="calcRoute()">Go</button>
+			<button type="button" class="btn btn-default" onclick="reset()">Reset</button>
+			<button type="button" class="btn btn-default" onclick="update(0,0,0,0)">Update</button>
+		</form>
+		<div id="info">
+			<span></span>
+			<button id="stop" class="btn btn-default" onclick="stop()">Stop</button>
+		</div>
+	</div>
 	<div id="map_canvas"></div>
-	<form class="form-inline" role="form" id="control">
-		<button type="button" class="btn btn-default" onclick="reset_all()">Reset</button>
-		<input type="time" value="" id="time" />
-		<button type="button" class="btn btn-default" onclick="calcRoute()">Go</button>
-	</form>
-	<div id="info"></div>
 	<div id="directionsPanel"></div>
 	<script src="http://code.jquery.com/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script
+		src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+	<script
+		src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/geolocationmarker/src/geolocationmarker-compiled.js"></script>
+	<script src="js/math.js"></script>
+	<script src="js/info.js"></script>
+	<script src="js/map.js"></script>
 </body>
 </html>

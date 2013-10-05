@@ -1,25 +1,29 @@
 #map_canvas{
 	position: absolute;
+	bottom: 0px;
 	width:100%; 
-	height:100%;
+	height:80%;
 }
-#control {
+
+#ui{
 	position: absolute;
 	top: 0px;
-	left: 50%;
-	width: 240px;
-	margin-left: -110px;
+	width: 100%;
+	height: 20%;
+}
+
+#input, #info {
+	position: absolute;
+	top: 50%;
+	width: 100%;
+	text-align: center;
+	margin-top: -20px;
 	z-index: 100;
 }
-#time {
-	width: 100px;
-}
-#info {
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
-	z-index: 300;
-	width: 100%;
-	background: #fff;
-}
+#time {width: 100px;}
+#info {display: none; font-size: 16pt;}
+.relax { background: #0fb0f2; color: #fff;}
+.hurry { background: #f35a16; color: #fff;}
+.ontime { background: #32cc13; color: #fff;}
+
 #directionsPanel{display: none;}

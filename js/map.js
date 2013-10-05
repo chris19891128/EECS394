@@ -5,6 +5,7 @@ var origin = null;
 var destination = null;
 var waypoints = [];
 var markers = [];
+var blueMarker;
 var directionsVisible = false;
 var date = new Date();
 var cur_hour = 0;
@@ -18,41 +19,45 @@ var get_c_Time = new Date();
 var updateInterval = 3; // in s
 var curSpeed; // in m/s
 var curLoc;
+var curTimeStamp;
+var info = $('#info span');
+var gSpeed = 1.34112;
 
-/*
- * function getCurrentLocation(){ // if(navigator.geolocation) { return
- * navigator.geolocation.getCurrentPosition(function(position) { var loc = new
- * google.maps.LatLng(position.coords.latitude, position.coords.longitude);
- * alert("current location " + loc.lat() + " " + loc.lng()); return loc; },
- * function() { alert("you don't have permission set"); return null; }); // } }
- */
+function trackingRoutine() {
+	var options = {
+		enableHighAccuracy : true,
+		timeout : 5000,
+		maximumAge : 0
+	};
 
-function addBlueMarker(loc) {
-	markers.push(new google.maps.Marker({
-		position : loc,
-		map : map,
-		// K-marker
-		icon : "http://maps.google.com/mapfiles/marker"
-				+ String.fromCharCode(10 + 65) + ".png"
-	}));
+	setInterval(function() {
+		navigator.geolocation.getCurrentPosition(success, fail, options);
+	}, updateInterval * 1000);
 }
 
-function trackRoutine() {
-	setInterval(function() {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			var nextLoc = new google.maps.LatLng(position.coords.latitude,
-					position.coords.longitude);
-			// alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());
-			addBlueMarker(nextLoc);
-			curSpeed = calDistance(curLoc.lat(), nextLoc.lat(), curLoc.lng(),
-					nextLoc.lng())
-					/ updateInterval;
-			// alert("Now you are travelling in speed of " + curSpeed + "m/s");
-			curLoc = nextLoc;
-		}, function() {
-			alert("you don't have permission set");
-		})
-	}, updateInterval * 1000);
+function success(position) {
+	var lat = position.coords.latitude;
+	var lng = position.coords.longitude;
+
+	console.log("Your position has changed to " + lat + " " + lng);
+	info.empty().append("Your position has changed to"
+			+ lat + " " + lng);
+
+	if (curLoc != null) {
+		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng())
+		curSpeed = distance / updateInterval;
+		console.log("You are now walking at speed " + curSpeed + "m/s");
+		info.empty().append("You are now walking at speed "
+				+ curSpeed + "m/s");
+	}
+	curLoc = new google.maps.LatLng(lat, lng);
+
+	map.setCenter(curLoc);
+	addBlueMarker(curLoc);
+}
+
+function fail(position) {
+
 }
 
 function initialize() {
@@ -60,9 +65,10 @@ function initialize() {
 		window.scrollTo(0, 1);
 	}
 	directionsDisplay = new google.maps.DirectionsRenderer();
+
 	var nuCampus = new google.maps.LatLng(42.053483, -87.676631);
 	var myOptions = {
-		zoom : 15,
+		zoom : 18,
 		mapTypeId : google.maps.MapTypeId.ROADMAP,
 		center : nuCampus
 	}
@@ -70,30 +76,13 @@ function initialize() {
 	directionsDisplay.setMap(map);
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
-	// Get Current Location "origin"
-	// if(navigator.geolocation) {
-	navigator.geolocation.getCurrentPosition(function(position) {
-		origin = new google.maps.LatLng(position.coords.latitude,
-				position.coords.longitude);
-		map.setCenter(origin);
-		addMarker(origin);
-		curLoc = origin;
-	}, function() {
-		handleNoGeolocation(true);
-	});
-	// } else {
-	// Browser doesn't support Geolocation
-	// handleNoGeolocation(false);
-	// }
-
 	// Get Target Location "destination"
 	google.maps.event.addListener(map, 'click', function(event) {
 		destination = event.latLng;
 		addMarker(destination);
 	});
 
-	// Run the routine of position update in separate thread
-	setTimeout(trackRoutine, 0);
+	trackingRoutine();
 }
 
 function addMarker(latlng) {
@@ -105,7 +94,21 @@ function addMarker(latlng) {
 	}));
 }
 
+function addBlueMarker(latlng) {
+	if (blueMarker != null) {
+		blueMarker.setMap(null);
+	}
+	blueMarker = new google.maps.Circle({
+		center : latlng,
+		map : map,
+		clickable : false,
+		fillColor : '#808080',
+		radius : 1,
+	})
+}
+
 function calcRoute() {
+
 	alert("you click the go!");
 	tTime = document.getElementById("time").value;
 	cTime = getCurrentTime();
@@ -116,9 +119,9 @@ function calcRoute() {
 	{
 		alert("target time is less than current time!");
 	}
+
 	if (origin == null) {
-		alert("Click on the map to add a start point");
-		return;
+		origin = curLoc;
 	}
 
 	if (destination == null) {
@@ -154,13 +157,15 @@ function calcRoute() {
 	directionsService.route(request, function(response, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(response);
-			document.getElementById("info").innerHTML = "Google Time: "
-					+ response.routes[0].legs[0].duration.value + " secs";
+			info.empty().append(
+					"Google Time: " + response.routes[0].legs[0].duration.value
+							+ " secs");
 		}
 	});
 
 	clearMarkers();
 	directionsVisible = true;
+	info.parent().toggle().siblings().toggle();
 }
 
 function updateMode() {
@@ -183,8 +188,7 @@ function clearWaypoints() {
 	directionsVisible = false;
 }
 
-function reset_all() {
-	alert("you click the reset");
+function reset() {
 	clearMarkers();
 	clearWaypoints();
 	directionsDisplay.setMap(null);
@@ -206,6 +210,11 @@ function reset_all() {
 		handleNoGeolocation(false);
 	}
 	map.setZoom(15);
+}
+
+function stop() {
+	reset();
+	info.parent().toggle().siblings().toggle();
 }
 
 function getCurrentTime() {
