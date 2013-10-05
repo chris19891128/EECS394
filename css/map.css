@@ -16,12 +16,14 @@
 	position: absolute;
 	top: 50%;
 	width: 100%;
-	height: 30px;
 	text-align: center;
 	margin-top: -20px;
 	z-index: 100;
 }
 #time {width: 100px;}
-#info {display: none;}
+#info {display: none; font-size: 16pt;}
+.relax { background: #0fb0f2; color: #fff;}
+.hurry { background: #f35a16; color: #fff;}
+.ontime { background: #32cc13; color: #fff;}
 
 #directionsPanel{display: none;}
