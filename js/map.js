@@ -5,6 +5,7 @@ var origin = null;
 var destination = null;
 var waypoints = [];
 var markers = [];
+var blueMarker;
 var directionsVisible = false;
 var cTime = 0;
 var gTime = 0;
@@ -16,44 +17,46 @@ var curTimeStamp;
 var info = $('#info span');
 var gSpeed = 1.34112;
 
-function setupTracker() {
-	var GeoMarker = new GeolocationMarker();
-	GeoMarker.setCircleOptions({
-		fillColor : '#808080'
-	});
-	GeoMarker.setMap(map);
+function trackingRoutine() {
+	var options = {
+		enableHighAccuracy : true,
+		timeout : 5000,
+		maximumAge : 0
+	};
+	
+	setInterval(
+			function() {
+				navigator.geolocation
+						.getCurrentPosition(
+								function success(position) {
+									var lat = position.coords.latitude;
+									var lng = position.coords.longitude;
 
-	google.maps.event
-			.addListener(
-					GeoMarker,
-					'position_changed',
-					function() {
-						console.log("Your position has changed to "
-								+ this.getPosition().lat() + " "
-								+ this.getPosition().lng());
-						info.empty().append("Your position has changed to"
-								+ this.getPosition().lat()
-								+ " "
-								+ this.getPosition().lng());
-						map.setCenter(this.getPosition());
+									console.log("Your position has changed to "
+											+ lat + " " + lng);
+									document.getElementById("info").innerHTML = "Your position has changed to"
+											+ lat + " " + lng;
 
-						if (typeof curLoc !== 'undefined') {
-							var distance = calDistance(
-									this.getPosition().lat(), curLoc.lat(),
-									this.getPosition().lng(), curLoc.lng())
-							var interval = new Date().getTime() / 1000
-									- curTimeStamp;
-							curSpeed = distance / interval;
-							console.log("You are now walking at speed "
-									+ curSpeed + "m/s");
-							info.empty().append("You are now walking at speed "
-									+ curSpeed + "m/s");
-						}
+									if (curLoc != null) {
+										var distance = calDistance(lat, curLoc
+												.lat(), lng, curLoc.lng())
+										curSpeed = distance / updateInterval;
+										console
+												.log("You are now walking at speed "
+														+ curSpeed + "m/s");
+										document.getElementById("info").innerHTML = "You are now walking at speed "
+												+ curSpeed + "m/s";
+									}
+									curLoc = new google.maps.LatLng(lat, lng);
 
-						curLoc = this.getPosition();
-						curTimeStamp = new Date().getTime() / 1000;
+									map.setCenter(curLoc);
+									addBlueMarker(curLoc);
+								}, fail, options);
+			}, updateInterval * 1000);
+}
 
-					});
+function fail(position) {
+
 }
 
 function initialize() {
@@ -72,13 +75,13 @@ function initialize() {
 	directionsDisplay.setMap(map);
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
-	setupTracker();
-
 	// Get Target Location "destination"
 	google.maps.event.addListener(map, 'click', function(event) {
 		destination = event.latLng;
 		addMarker(destination);
 	});
+
+	trackingRoutine();
 }
 
 function addMarker(latlng) {
@@ -88,6 +91,19 @@ function addMarker(latlng) {
 		icon : "http://maps.google.com/mapfiles/marker"
 				+ String.fromCharCode(markers.length + 65) + ".png"
 	}));
+}
+
+function addBlueMarker(latlng) {
+	if (blueMarker != null) {
+		blueMarker.setMap(null);
+	}
+	blueMarker = new google.maps.Circle({
+		center : latlng,
+		map : map,
+		clickable : false,
+		fillColor : '#808080',
+		radius : 1,
+	})
 }
 
 function calcRoute() {
