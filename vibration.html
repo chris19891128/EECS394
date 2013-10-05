@@ -1,42 +1,39 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Vibration</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap -->
-  </head>
-  
-  <body>
-	<button type="button" id = "slow" onclick = "vibration_slow()" >Vibration once</button>
-	<button type="button" id = "fast" onclick = "vibration_fast()" >Vibration twice</button>
-	<button type="button" id = "time" onclick = "getCurrentTime()" >get Time</button>
-	
+<head>
+<title>Vibration</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+</head>
+
+<body>
+	<button type="button" id="slow" onclick="vibration_slow()">Vibration
+		once</button>
+	<button type="button" id="fast" onclick="vibration_fast()">Vibration
+		twice</button>
+	<button type="button" id="time" onclick="getCurrentTime()">get
+		Time</button>
+
 	<script type="text/javascript">
-	function decide()
-	{
-	
-	
-	
-	}
-	
-	function getCurrentTime()
-	{
-		var date = new Date();
-		var time = date.toLocaleTimeString();
-		alert(time);
-	}
-	function vibration_slow()
-	{
-		//var supportsVibrate = "vibrate" in navigator;
-		//alert("supportsVibrate: " + supportsVibrate);
-		navigator.vibrate(1000);
-	}
-	
-	function vibration_fast()
-	{
-		navigator.vibrate(2000);
-	}
+		function decide() {
+
+		}
+
+		function getCurrentTime() {
+			var date = new Date();
+			var time = date.toLocaleTimeString();
+			alert(time);
+		}
+		function vibration_slow() {
+			//var supportsVibrate = "vibrate" in navigator;
+			//alert("supportsVibrate: " + supportsVibrate);
+			navigator.vibrate(1000);
+		}
+
+		function vibration_fast() {
+			navigator.vibrate(2000);
+		}
 	</script>
-  </body>
-  
+</body>
+
 </html>
