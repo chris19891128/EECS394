@@ -13,6 +13,8 @@ var updateInterval = 3; // in s
 var curSpeed; // in m/s
 var curLoc;
 var curTimeStamp;
+var info = $('#info span');
+var gSpeed = 1.34112;
 
 function setupTracker() {
 	var GeoMarker = new GeolocationMarker();
@@ -29,10 +31,10 @@ function setupTracker() {
 						console.log("Your position has changed to "
 								+ this.getPosition().lat() + " "
 								+ this.getPosition().lng());
-						document.getElementById("info").innerHTML = "Your position has changed to"
+						info.empty().append("Your position has changed to"
 								+ this.getPosition().lat()
 								+ " "
-								+ this.getPosition().lng();
+								+ this.getPosition().lng());
 						map.setCenter(this.getPosition());
 
 						if (typeof curLoc !== 'undefined') {
@@ -44,8 +46,8 @@ function setupTracker() {
 							curSpeed = distance / interval;
 							console.log("You are now walking at speed "
 									+ curSpeed + "m/s");
-							document.getElementById("info").innerHTML = "You are now walking at speed "
-									+ curSpeed + "m/s";
+							info.empty().append("You are now walking at speed "
+									+ curSpeed + "m/s");
 						}
 
 						curLoc = this.getPosition();
@@ -117,13 +119,14 @@ function calcRoute() {
 	directionsService.route(request, function(response, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(response);
-			info.innerHTML = "Google Time: "
-					+ response.routes[0].legs[0].duration.value + " secs";
+			info.empty().append("Google Time: "
+					+ response.routes[0].legs[0].duration.value + " secs");
 		}
 	});
 
 	clearMarkers();
 	directionsVisible = true;
+	info.parent().toggle().siblings().toggle();
 }
 
 function updateMode() {
@@ -168,6 +171,11 @@ function reset() {
 		handleNoGeolocation(false);
 	}
 	map.setZoom(15);
+}
+
+function stop() {
+	reset();
+	info.parent().toggle().siblings().toggle();
 }
 
 function getCurrentTime() {
