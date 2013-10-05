@@ -23,9 +23,12 @@ function setupTracker() {
 
 	google.maps.event.addListener(GeoMarker, 'position_changed',
 			function() {
-				alert("Your position has changed to "
+				console.log("Your position has changed to "
 						+ this.getPosition().lat() + " "
 						+ this.getPosition().lng());
+				document.getElementById("info").innerHTML = "Your position has changed to"
+						+ this.getPosition().lat() + " "
+						+ this.getPosition().lng();
 				map.setCenter(this.getPosition());
 
 				if (typeof curLoc !== 'undefined') {
@@ -33,7 +36,8 @@ function setupTracker() {
 							.lat(), this.getPosition().lng(), curLoc.lng())
 					var interval = new Date().getTime() / 1000 - curTimeStamp;
 					curSpeed = distance / interval;
-					alert("You are now walking at speed " + curSpeed + "m/s");
+					console.log("You are now walking at speed " + curSpeed + "m/s");
+					document.getElementById("info").innerHTML = "You are now walking at speed " + curSpeed + "m/s";
 				}
 
 				curLoc = this.getPosition();
@@ -104,7 +108,7 @@ function calcRoute() {
 	directionsService.route(request, function(response, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(response);
-			document.getElementById("info").innerHTML = "Google Time: "
+			info.innerHTML = "Google Time: "
 					+ response.routes[0].legs[0].duration.value + " secs";
 		}
 	});

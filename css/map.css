@@ -16,10 +16,11 @@
 }
 #info {
 	position: absolute;
-	bottom: 0px;
+	top: 30px;
 	left: 0px;
 	z-index: 300;
 	width: 100%;
+	text-align: center;
 	background: #fff;
 }
 #directionsPanel{display: none;}
