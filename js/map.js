@@ -12,41 +12,38 @@ var tTime = 0;
 var updateInterval = 3; // in s
 var curSpeed; // in m/s
 var curLoc;
+var curTimeStamp;
 
-/*
- * function getCurrentLocation(){ // if(navigator.geolocation) { return
- * navigator.geolocation.getCurrentPosition(function(position) { var loc = new
- * google.maps.LatLng(position.coords.latitude, position.coords.longitude);
- * alert("current location " + loc.lat() + " " + loc.lng()); return loc; },
- * function() { alert("you don't have permission set"); return null; }); // } }
- */
+function setupTracker() {
+	var GeoMarker = new GeolocationMarker();
+	GeoMarker.setCircleOptions({
+		fillColor : '#808080'
+	});
+	GeoMarker.setMap(map);
 
-function addBlueMarker(loc) {
-	markers.push(new google.maps.Marker({
-		position : loc,
-		map : map,
-		// K-marker
-		icon : "http://maps.google.com/mapfiles/marker"
-				+ String.fromCharCode(10 + 65) + ".png"
-	}));
-}
+	google.maps.event.addListener(GeoMarker, 'position_changed',
+			function() {
+				console.log("Your position has changed to "
+						+ this.getPosition().lat() + " "
+						+ this.getPosition().lng());
+				document.getElementById("info").innerHTML = "Your position has changed to"
+						+ this.getPosition().lat() + " "
+						+ this.getPosition().lng();
+				map.setCenter(this.getPosition());
 
-function trackRoutine() {
-	setInterval(function() {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			var nextLoc = new google.maps.LatLng(position.coords.latitude,
-					position.coords.longitude);
-			// alert("Now you are at " + nextLoc.lat() + " " + nextLoc.lng());
-			addBlueMarker(nextLoc);
-			curSpeed = calDistance(curLoc.lat(), nextLoc.lat(), curLoc.lng(),
-					nextLoc.lng())
-					/ updateInterval;
-			// alert("Now you are travelling in speed of " + curSpeed + "m/s");
-			curLoc = nextLoc;
-		}, function() {
-			alert("you don't have permission set");
-		})
-	}, updateInterval * 1000);
+				if (typeof curLoc !== 'undefined') {
+					var distance = calDistance(this.getPosition().lat(), curLoc
+							.lat(), this.getPosition().lng(), curLoc.lng())
+					var interval = new Date().getTime() / 1000 - curTimeStamp;
+					curSpeed = distance / interval;
+					console.log("You are now walking at speed " + curSpeed + "m/s");
+					document.getElementById("info").innerHTML = "You are now walking at speed " + curSpeed + "m/s";
+				}
+
+				curLoc = this.getPosition();
+				curTimeStamp = new Date().getTime() / 1000;
+
+			});
 }
 
 function initialize() {
@@ -54,9 +51,10 @@ function initialize() {
 		window.scrollTo(0, 1);
 	}
 	directionsDisplay = new google.maps.DirectionsRenderer();
+
 	var nuCampus = new google.maps.LatLng(42.053483, -87.676631);
 	var myOptions = {
-		zoom : 15,
+		zoom : 18,
 		mapTypeId : google.maps.MapTypeId.ROADMAP,
 		center : nuCampus
 	}
@@ -64,30 +62,13 @@ function initialize() {
 	directionsDisplay.setMap(map);
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
-	// Get Current Location "origin"
-	// if(navigator.geolocation) {
-	navigator.geolocation.getCurrentPosition(function(position) {
-		origin = new google.maps.LatLng(position.coords.latitude,
-				position.coords.longitude);
-		map.setCenter(origin);
-		addMarker(origin);
-		curLoc = origin;
-	}, function() {
-		handleNoGeolocation(true);
-	});
-	// } else {
-	// Browser doesn't support Geolocation
-	// handleNoGeolocation(false);
-	// }
+	setupTracker();
 
 	// Get Target Location "destination"
 	google.maps.event.addListener(map, 'click', function(event) {
 		destination = event.latLng;
 		addMarker(destination);
 	});
-
-	// Run the routine of position update in separate thread
-	setTimeout(trackRoutine, 0);
 }
 
 function addMarker(latlng) {
@@ -100,10 +81,9 @@ function addMarker(latlng) {
 }
 
 function calcRoute() {
-	alert("you click the go!");
+
 	if (origin == null) {
-		alert("Click on the map to add a start point");
-		return;
+		origin = curLoc;
 	}
 
 	if (destination == null) {
@@ -129,7 +109,7 @@ function calcRoute() {
 	directionsService.route(request, function(response, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(response);
-			document.getElementById("info").innerHTML = "Google Time: "
+			info.innerHTML = "Google Time: "
 					+ response.routes[0].legs[0].duration.value + " secs";
 		}
 	});
@@ -158,8 +138,8 @@ function clearWaypoints() {
 	directionsVisible = false;
 }
 
-function reset_all() {
-	alert("you click the reset");
+
+function reset() {
 	clearMarkers();
 	clearWaypoints();
 	directionsDisplay.setMap(null);
