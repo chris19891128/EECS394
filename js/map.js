@@ -23,36 +23,31 @@ function trackingRoutine() {
 		timeout : 5000,
 		maximumAge : 0
 	};
-	
-	setInterval(
-			function() {
-				navigator.geolocation
-						.getCurrentPosition(
-								function success(position) {
-									var lat = position.coords.latitude;
-									var lng = position.coords.longitude;
 
-									console.log("Your position has changed to "
-											+ lat + " " + lng);
-									document.getElementById("info").innerHTML = "Your position has changed to"
-											+ lat + " " + lng;
+	setInterval(function() {
+		navigator.geolocation.getCurrentPosition(success, fail, options);
+	}, updateInterval * 1000);
+}
 
-									if (curLoc != null) {
-										var distance = calDistance(lat, curLoc
-												.lat(), lng, curLoc.lng())
-										curSpeed = distance / updateInterval;
-										console
-												.log("You are now walking at speed "
-														+ curSpeed + "m/s");
-										document.getElementById("info").innerHTML = "You are now walking at speed "
-												+ curSpeed + "m/s";
-									}
-									curLoc = new google.maps.LatLng(lat, lng);
+function success(position) {
+	var lat = position.coords.latitude;
+	var lng = position.coords.longitude;
 
-									map.setCenter(curLoc);
-									addBlueMarker(curLoc);
-								}, fail, options);
-			}, updateInterval * 1000);
+	console.log("Your position has changed to " + lat + " " + lng);
+	document.getElementById("info").innerHTML = "Your position has changed to"
+			+ lat + " " + lng;
+
+	if (curLoc != null) {
+		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng())
+		curSpeed = distance / updateInterval;
+		console.log("You are now walking at speed " + curSpeed + "m/s");
+		document.getElementById("info").innerHTML = "You are now walking at speed "
+				+ curSpeed + "m/s";
+	}
+	curLoc = new google.maps.LatLng(lat, lng);
+
+	map.setCenter(curLoc);
+	addBlueMarker(curLoc);
 }
 
 function fail(position) {
@@ -135,8 +130,9 @@ function calcRoute() {
 	directionsService.route(request, function(response, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(response);
-			info.empty().append("Google Time: "
-					+ response.routes[0].legs[0].duration.value + " secs");
+			info.empty().append(
+					"Google Time: " + response.routes[0].legs[0].duration.value
+							+ " secs");
 		}
 	});
 
