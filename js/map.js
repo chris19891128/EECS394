@@ -23,7 +23,6 @@ function trackingRoutine() {
 		timeout : 5000,
 		maximumAge : 0
 	};
-<<<<<<< HEAD
 
 	setInterval(function() {
 		navigator.geolocation.getCurrentPosition(success, fail, options);
