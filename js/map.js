@@ -21,29 +21,37 @@ function setupTracker() {
 	});
 	GeoMarker.setMap(map);
 
-	google.maps.event.addListener(GeoMarker, 'position_changed',
-			function() {
-				console.log("Your position has changed to "
-						+ this.getPosition().lat() + " "
-						+ this.getPosition().lng());
-				document.getElementById("info").innerHTML = "Your position has changed to"
-						+ this.getPosition().lat() + " "
-						+ this.getPosition().lng();
-				map.setCenter(this.getPosition());
+	google.maps.event
+			.addListener(
+					GeoMarker,
+					'position_changed',
+					function() {
+						console.log("Your position has changed to "
+								+ this.getPosition().lat() + " "
+								+ this.getPosition().lng());
+						document.getElementById("info").innerHTML = "Your position has changed to"
+								+ this.getPosition().lat()
+								+ " "
+								+ this.getPosition().lng();
+						map.setCenter(this.getPosition());
 
-				if (typeof curLoc !== 'undefined') {
-					var distance = calDistance(this.getPosition().lat(), curLoc
-							.lat(), this.getPosition().lng(), curLoc.lng())
-					var interval = new Date().getTime() / 1000 - curTimeStamp;
-					curSpeed = distance / interval;
-					console.log("You are now walking at speed " + curSpeed + "m/s");
-					document.getElementById("info").innerHTML = "You are now walking at speed " + curSpeed + "m/s";
-				}
+						if (typeof curLoc !== 'undefined') {
+							var distance = calDistance(
+									this.getPosition().lat(), curLoc.lat(),
+									this.getPosition().lng(), curLoc.lng())
+							var interval = new Date().getTime() / 1000
+									- curTimeStamp;
+							curSpeed = distance / interval;
+							console.log("You are now walking at speed "
+									+ curSpeed + "m/s");
+							document.getElementById("info").innerHTML = "You are now walking at speed "
+									+ curSpeed + "m/s";
+						}
 
-				curLoc = this.getPosition();
-				curTimeStamp = new Date().getTime() / 1000;
+						curLoc = this.getPosition();
+						curTimeStamp = new Date().getTime() / 1000;
 
-			});
+					});
 }
 
 function initialize() {
@@ -137,7 +145,6 @@ function clearWaypoints() {
 	waypoints = [];
 	directionsVisible = false;
 }
-
 
 function reset() {
 	clearMarkers();
