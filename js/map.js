@@ -32,6 +32,7 @@ function addBlueMarker(loc){
   markers.push(new google.maps.Marker({
   position: loc,
   map: map,
+  //K-marker
   icon: "http://maps.google.com/mapfiles/marker" + String.fromCharCode(10 + 65) + ".png"
   }));
 }
@@ -103,6 +104,7 @@ function addMarker(latlng) {
 }
 
 function calcRoute() {
+	alert("you click the go!");
   if (origin == null) {
     alert("Click on the map to add a start point");
     return;
@@ -152,6 +154,7 @@ function clearMarkers() {
   }
 }
 
+
 function clearWaypoints() {
   markers = [];
   origin = null;
@@ -160,7 +163,8 @@ function clearWaypoints() {
   directionsVisible = false;
 }
 
-function reset() {
+function reset_all() {
+	alert("you click the reset");
   clearMarkers();
   clearWaypoints();
   directionsDisplay.setMap(null);
