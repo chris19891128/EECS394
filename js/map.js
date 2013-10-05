@@ -21,7 +21,7 @@ function setupTracker() {
 	});
 	GeoMarker.setMap(map);
 
-	google.maps.event.addListenerOnce(GeoMarker, 'position_changed',
+	google.maps.event.addListener(GeoMarker, 'position_changed',
 			function() {
 				alert("Your position has changed to "
 						+ this.getPosition().lat() + " "
