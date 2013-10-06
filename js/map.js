@@ -7,6 +7,7 @@ var waypoints = [];
 var markers = [];
 var blueMarker;
 var directionsVisible = false;
+var listener = null;
 var date = new Date();
 var cur_hour = 0;
 var cur_min = 0;
@@ -34,6 +35,7 @@ function trackingRoutine() {
 		navigator.geolocation.getCurrentPosition(success, fail, options);
 	}, updateInterval * 1000);
 }
+
 
 function success(position) {
 	var lat = position.coords.latitude;
@@ -75,9 +77,16 @@ function initialize() {
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
 	// Get Target Location "destination"
-	google.maps.event.addListener(map, 'click', function(event) {
-		destination = event.latLng;
-		addMarker(destination);
+	listener = google.maps.event.addListener(map, 'click', function(event) {
+		if (destination==null) {
+			destination = event.latLng;
+			addMarker(destination);
+		} else {
+			markers[0].setMap(null);
+			markers=[];
+			destination = event.latLng;
+			addMarker(destination);
+		}
 	});
 
 	trackingRoutine();
@@ -136,6 +145,7 @@ function calcRoute() {
 		travelMode : mode,
 		optimizeWaypoints : true,
 	};
+	google.maps.event.removeListener(listener);
 
 	directionsService.route(request, function(response, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
@@ -180,6 +190,7 @@ function resetAll() {
 	directionsDisplay = new google.maps.DirectionsRenderer();
 	directionsDisplay.setMap(map);
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+	document.getElementById("input").reset();
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -197,6 +208,17 @@ function resetAll() {
 
 function stop() {
 	resetAll();
+	listener = google.maps.event.addListener(map, 'click', function(event) {
+		if (destination==null) {
+			destination = event.latLng;
+			addMarker(destination);
+		} else {
+			markers[0].setMap(null);
+			markers=[];
+			destination = event.latLng;
+			addMarker(destination);
+		}
+	});
 	info.parent().parent().removeAttr('class');
 	info.parent().toggle().siblings().toggle();
 }
