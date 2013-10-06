@@ -23,6 +23,7 @@ var timeWindow = 90;
 // UI states
 var goClicked = false;
 
+
 function trackingRoutine() {
 	var options = {
 		enableHighAccuracy : true,
@@ -68,7 +69,7 @@ function initialize() {
 
 	var nuCampus = new google.maps.LatLng(42.053483, -87.676631);
 	var myOptions = {
-		zoom : 18,
+		zoom : 17,
 		mapTypeId : google.maps.MapTypeId.ROADMAP,
 		center : nuCampus
 	}
@@ -77,7 +78,7 @@ function initialize() {
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
 	// Get Target Location "destination"
-	google.maps.event.addListener(map, 'click', function(event) {
+	google.maps.event.addListenerOnce(map, 'click', function(event) {
 		destination = event.latLng;
 		addMarker(destination);
 	});
@@ -89,8 +90,7 @@ function addMarker(latlng) {
 	markers.push(new google.maps.Marker({
 		position : latlng,
 		map : map,
-		icon : "http://maps.google.com/mapfiles/marker"
-				+ String.fromCharCode(markers.length + 65) + ".png"
+//		icon : "http://maps.google.com/mapfiles/marker" + String.fromCharCode(markers.length + 65) + ".png"
 	}));
 }
 
@@ -98,13 +98,18 @@ function addBlueMarker(latlng) {
 	if (blueMarker != null) {
 		blueMarker.setMap(null);
 	}
-	blueMarker = new google.maps.Circle({
-		center : latlng,
-		map : map,
-		clickable : false,
-		fillColor : '#808080',
-		radius : 1,
-	})
+//	blueMarker = new google.maps.Circle({
+//		center : latlng,
+//		map : map,
+//		clickable : false,
+//		fillColor : '#0fb0f2',
+//		radius : 4,
+//	})
+	blueMarker = new google.maps.Marker({
+	      position: latlng,
+	      map: map,
+	      icon: "img/dot.png"
+	});
 }
 
 function calcRoute() {
@@ -191,7 +196,7 @@ function clearWaypoints() {
 	destination = null;
 }
 
-function reset() {
+function resetAll() {
 	clearMarkers();
 	clearWaypoints();
 	directionsDisplay.setMap(null);
@@ -205,18 +210,18 @@ function reset() {
 			var origin = new google.maps.LatLng(position.coords.latitude,
 					position.coords.longitude);
 			map.setCenter(origin);
-			addMarker(origin);
+			map.setZoom(17);
 		}, function() {
 			handleNoGeolocation(true);
 		});
 	} else {
 		handleNoGeolocation(false);
 	}
-	map.setZoom(15);
 }
 
 function stop() {
-	reset();
+	resetAll();
+	info.parent().parent().removeAttr('class');
 	info.parent().toggle().siblings().toggle();
 }
 

@@ -14,11 +14,11 @@
 		<form class="form-inline" role="form" id="input">
 			Arrive at: <input type="time" value="" id="time" />
 			<button type="button" class="btn btn-default" onclick="calcRoute()">Go</button>
-			<button type="button" class="btn btn-default" onclick="reset()">Reset</button>
-			<button type="button" class="btn btn-default" onclick="update(0,0,0,0)">Update</button>
+			<button type="button" class="btn btn-default" onclick="resetAll()">Reset</button>
 		</form>
 		<div id="info">
-			<span></span>
+			<span id="msg"></span>
+			<span id="speed"></span>
 			<button id="stop" class="btn btn-default" onclick="stop()">Stop</button>
 		</div>
 	</div>
