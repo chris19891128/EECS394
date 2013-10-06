@@ -261,23 +261,6 @@ function stop() {
 	info.parent().toggle().siblings().toggle();
 }
 
-function getCurrentTime() {
-	cur_hour = date.getHours();
-	cur_min = date.getMinutes();
-	var time = cur_hour + ":" + cur_min;
-	return time;
-}
-
-function setTime(time) {
-	var time_array = new Array();
-	time_array = time.split(":");
-	var tar_hour = time_array[0];
-	var tar_min = time_array[1];
-	var TTime = new Date();
-	TTime.setHours(time_array[0], time_array[1]);
-	return TTime;
-}
-
 function vibration_slow() {
 	// var supportsVibrate = "vibrate" in navigator;
 	// alert("supportsVibrate: " + supportsVibrate);
