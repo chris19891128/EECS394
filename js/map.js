@@ -229,6 +229,7 @@ function resetAll() {
 	directionsDisplay.setMap(map);
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 	document.getElementById("input").reset();
+	targetTime=null;
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
