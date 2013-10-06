@@ -66,7 +66,7 @@ function initialize() {
 
 	var nuCampus = new google.maps.LatLng(42.053483, -87.676631);
 	var myOptions = {
-		zoom : 18,
+		zoom : 17,
 		mapTypeId : google.maps.MapTypeId.ROADMAP,
 		center : nuCampus
 	}
@@ -172,7 +172,7 @@ function clearWaypoints() {
 	directionsVisible = false;
 }
 
-function reset() {
+function resetAll() {
 	clearMarkers();
 	clearWaypoints();
 	directionsDisplay.setMap(null);
@@ -186,18 +186,17 @@ function reset() {
 			origin = new google.maps.LatLng(position.coords.latitude,
 					position.coords.longitude);
 			map.setCenter(origin);
-			addMarker(origin);
+			map.setZoom(17);
 		}, function() {
 			handleNoGeolocation(true);
 		});
 	} else {
 		handleNoGeolocation(false);
 	}
-	map.setZoom(15);
 }
 
 function stop() {
-	reset();
+	resetAll();
 	info.parent().toggle().siblings().toggle();
 }
 
