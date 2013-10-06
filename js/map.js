@@ -75,7 +75,7 @@ function initialize() {
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
 	// Get Target Location "destination"
-	google.maps.event.addListener(map, 'click', function(event) {
+	google.maps.event.addListenerOnce(map, 'click', function(event) {
 		destination = event.latLng;
 		addMarker(destination);
 	});
@@ -95,13 +95,18 @@ function addBlueMarker(latlng) {
 	if (blueMarker != null) {
 		blueMarker.setMap(null);
 	}
-	blueMarker = new google.maps.Circle({
-		center : latlng,
-		map : map,
-		clickable : false,
-		fillColor : '#0fb0f2',
-		radius : 4,
-	})
+//	blueMarker = new google.maps.Circle({
+//		center : latlng,
+//		map : map,
+//		clickable : false,
+//		fillColor : '#0fb0f2',
+//		radius : 4,
+//	})
+	blueMarker = new google.maps.Marker({
+	      position: latlng,
+	      map: map,
+	      icon: "img/dot.png"
+	});
 }
 
 function calcRoute() {
