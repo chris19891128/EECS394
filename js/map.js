@@ -23,7 +23,6 @@ var timeWindow = 90;
 // UI states
 var goClicked = false;
 
-
 function trackingRoutine() {
 	var options = {
 		enableHighAccuracy : true,
@@ -46,7 +45,8 @@ function success(position) {
 	if (curLoc != null) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng())
 		curSpeed = distance / updateInterval;
-		speedBar.empty().append("You are travelling at speed " + curSpeed + "m/s");
+		speedBar.empty().append(
+				"You are travelling at speed " + curSpeed + "m/s");
 		// console.log("You are now walking at speed " + curSpeed + "m/s");
 		// info.empty().append("You are now walking at speed "+ curSpeed +
 		// "m/s");
@@ -78,9 +78,16 @@ function initialize() {
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 
 	// Get Target Location "destination"
-	google.maps.event.addListenerOnce(map, 'click', function(event) {
-		destination = event.latLng;
-		addMarker(destination);
+	listener = google.maps.event.addListener(map, 'click', function(event) {
+		if (destination == null) {
+			destination = event.latLng;
+			addMarker(destination);
+		} else {
+			markers[0].setMap(null);
+			markers = [];
+			destination = event.latLng;
+			addMarker(destination);
+		}
 	});
 
 	trackingRoutine();
@@ -90,7 +97,8 @@ function addMarker(latlng) {
 	markers.push(new google.maps.Marker({
 		position : latlng,
 		map : map,
-//		icon : "http://maps.google.com/mapfiles/marker" + String.fromCharCode(markers.length + 65) + ".png"
+	// icon : "http://maps.google.com/mapfiles/marker" +
+	// String.fromCharCode(markers.length + 65) + ".png"
 	}));
 }
 
@@ -98,30 +106,30 @@ function addBlueMarker(latlng) {
 	if (blueMarker != null) {
 		blueMarker.setMap(null);
 	}
-//	blueMarker = new google.maps.Circle({
-//		center : latlng,
-//		map : map,
-//		clickable : false,
-//		fillColor : '#0fb0f2',
-//		radius : 4,
-//	})
+	// blueMarker = new google.maps.Circle({
+	// center : latlng,
+	// map : map,
+	// clickable : false,
+	// fillColor : '#0fb0f2',
+	// radius : 4,
+	// })
 	blueMarker = new google.maps.Marker({
-	      position: latlng,
-	      map: map,
-	      icon: "img/dot.png"
+		position : latlng,
+		map : map,
+		icon : "img/dot.png"
 	});
 }
 
 function calcRoute() {
 
 	goClicked = true;
-	
+
 	if (targetTime == null) {
 		var str = document.getElementById("time").value;
-		if(str == null){
+		if (str == null) {
 			alert("Click on the time setting to add your target time");
 			return;
-		} else{
+		} else {
 			targetTime = new Date();
 			targetTime.setHours(str.split(":")[0], str.split(":")[1], 0);
 			// TODO check current time is before target time
@@ -149,34 +157,41 @@ function updateRouteOnMap() {
 		travelMode : mode,
 		optimizeWaypoints : true,
 	};
+	google.maps.event.removeListener(listener);
 
-	directionsService.route(request, function(response, status) {
-		if (status == google.maps.DirectionsStatus.OK) {
-			directionsDisplay.setDirections(response);
-			var gTime = response.routes[0].legs[0].duration.value;
-			var timeToDest = (targetTime.getTime() - new Date().getTime()) / 1000;
-			if(timeToDest - gTime > timeWindow){
-				tooEarly(timeToDest - gTime);
-			} else if(timeToDest - gTime < -timeWindow){
-				tooLate(gTime - timeToDest);
-			} else{
-				justOk();
-			}
-		}
-	});
+	directionsService.route(request,
+			function(response, status) {
+				if (status == google.maps.DirectionsStatus.OK) {
+					directionsDisplay.setDirections(response);
+					var gTime = response.routes[0].legs[0].duration.value;
+					var timeToDest = (targetTime.getTime() - new Date()
+							.getTime()) / 1000;
+					if (timeToDest - gTime > timeWindow) {
+						tooEarly(timeToDest - gTime);
+					} else if (timeToDest - gTime < -timeWindow) {
+						tooLate(gTime - timeToDest);
+					} else {
+						justOk();
+					}
+				}
+			});
 }
 
-function tooEarly(sec){
+function tooEarly(sec) {
 	info.parent().parent().addClass('relax');
-	info.empty().append("Relax! You will arrive at your location " + Math.round(sec/60) + " mins earlier :)");
+	info.empty().append(
+			"Relax! You will arrive at your location " + Math.round(sec / 60)
+					+ " mins earlier :)");
 }
 
-function tooLate(sec){
+function tooLate(sec) {
 	info.parent().addClass('hurry');
-	info.empty().append("Hurry! You will arrive at your destination " + Math.round(sec/60) + " mins late!");
+	info.empty().append(
+			"Hurry! You will arrive at your destination "
+					+ Math.round(sec / 60) + " mins late!");
 }
 
-function justOk(){
+function justOk() {
 	info.parent().addClass('ontime');
 	info.empty().append("Just keep up, you will be on time :)");
 }
@@ -187,7 +202,6 @@ function routeUpdateRoutine() {
 		updateRouteOnMap();
 	}, notifyInterval * 1000);
 }
-
 
 function clearMarkers() {
 	for (var i = 0; i < markers.length; i++) {
@@ -208,6 +222,7 @@ function resetAll() {
 	directionsDisplay = new google.maps.DirectionsRenderer();
 	directionsDisplay.setMap(map);
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+	document.getElementById("input").reset();
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -225,6 +240,17 @@ function resetAll() {
 
 function stop() {
 	resetAll();
+	listener = google.maps.event.addListener(map, 'click', function(event) {
+		if (destination == null) {
+			destination = event.latLng;
+			addMarker(destination);
+		} else {
+			markers[0].setMap(null);
+			markers = [];
+			destination = event.latLng;
+			addMarker(destination);
+		}
+	});
 	info.parent().parent().removeAttr('class');
 	info.parent().toggle().siblings().toggle();
 }
