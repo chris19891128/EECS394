@@ -100,8 +100,8 @@ function addBlueMarker(latlng) {
 		center : latlng,
 		map : map,
 		clickable : false,
-		fillColor : '#808080',
-		radius : 1,
+		fillColor : '#0fb0f2',
+		radius : 4,
 	})
 }
 
@@ -198,6 +198,7 @@ function reset() {
 
 function stop() {
 	reset();
+	info.parent().parent().removeAttr('class');
 	info.parent().toggle().siblings().toggle();
 }
 
