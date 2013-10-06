@@ -20,7 +20,7 @@ var updateInterval = 3; // in s
 var curSpeed; // in m/s
 var curLoc;
 var curTimeStamp;
-var info = $('#info span');
+var info = $('#msg');
 var gSpeed = 1.34112;
 
 function trackingRoutine() {
@@ -154,12 +154,6 @@ function calcRoute() {
 	clearMarkers();
 	directionsVisible = true;
 	
-}
-
-function updateMode() {
-	if (directionsVisible) {
-		calcRoute();
-	}
 }
 
 function clearMarkers() {
