@@ -39,16 +39,14 @@ function success(position) {
 	var lat = position.coords.latitude;
 	var lng = position.coords.longitude;
 
-	console.log("Your position has changed to " + lat + " " + lng);
-	info.empty().append("Your position has changed to"
-			+ lat + " " + lng);
+//	console.log("Your position has changed to " + lat + " " + lng);
+//	info.empty().append("Your position has changed to"+ lat + " " + lng);
 
 	if (curLoc != null) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng())
 		curSpeed = distance / updateInterval;
-		console.log("You are now walking at speed " + curSpeed + "m/s");
-		info.empty().append("You are now walking at speed "
-				+ curSpeed + "m/s");
+//		console.log("You are now walking at speed " + curSpeed + "m/s");
+//		info.empty().append("You are now walking at speed "+ curSpeed + "m/s");
 	}
 	curLoc = new google.maps.LatLng(lat, lng);
 
@@ -109,7 +107,7 @@ function addBlueMarker(latlng) {
 
 function calcRoute() {
 
-	alert("you click the go!");
+//	alert("you click the go!");
 	tTime = document.getElementById("time").value;
 	cTime = getCurrentTime();
 	get_t_Time = setTime(tTime);
@@ -143,14 +141,15 @@ function calcRoute() {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(response);
 			gTime = response.routes[0].legs[0].duration.value;
-			info.empty().append(
-					"Google Time: " + gTime + " secs");
+			update(0,get_c_Time,get_t_Time,gTime);
+			console.log(gTime);
+//			info.empty().append("Google Time: " + gTime + " secs");
 		}
 	});
 
 	clearMarkers();
 	directionsVisible = true;
-	update(0,get_c_Time,get_t_Time,gTime)
+	
 }
 
 function updateMode() {
