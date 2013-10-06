@@ -4,7 +4,7 @@ var directionsService = new google.maps.DirectionsService();
 var map;
 var markers = [];
 var blueMarker;
-var info = $('#info span');
+var info = $('#msg');
 var speedBar = $('#speed');
 
 // User inputs
@@ -117,12 +117,15 @@ function calcRoute() {
 	goClicked = true;
 	
 	if (targetTime == null) {
-		alert("Click on the time setting to add your target time");
-		targetTime = new Date();
-		var str = document.getElementById("time");
-		targetTime.setHours(str.split(":")[0], str.split(":")[1], 0);
-		// TODO check current time is before target time
-		return;
+		var str = document.getElementById("time").value;
+		if(str == null){
+			alert("Click on the time setting to add your target time");
+			return;
+		} else{
+			targetTime = new Date();
+			targetTime.setHours(str.split(":")[0], str.split(":")[1], 0);
+			// TODO check current time is before target time
+		}
 	}
 
 	if (destination == null) {
@@ -132,6 +135,7 @@ function calcRoute() {
 
 	routeUpdateRoutine();
 
+	info.parent().toggle().siblings().toggle();
 	clearMarkers();
 }
 
@@ -162,14 +166,14 @@ function updateRouteOnMap() {
 	});
 }
 
-function tooEarly(min){
+function tooEarly(sec){
 	info.parent().parent().addClass('relax');
-	info.empty().append("Relax! You will arrive at your location " + min + " mins earlier :)");
+	info.empty().append("Relax! You will arrive at your location " + Math.round(sec/60) + " mins earlier :)");
 }
 
-function tooLate(min){
+function tooLate(sec){
 	info.parent().addClass('hurry');
-	info.empty().append("Hurry! You will arrive at your destination " + min + " mins late!");
+	info.empty().append("Hurry! You will arrive at your destination " + Math.round(sec/60) + " mins late!");
 }
 
 function justOk(){
