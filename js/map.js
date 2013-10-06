@@ -1,27 +1,27 @@
+// HTML element global
 var directionDisplay;
 var directionsService = new google.maps.DirectionsService();
 var map;
-var origin = null;
-var destination = null;
-var waypoints = [];
 var markers = [];
 var blueMarker;
-var directionsVisible = false;
-var date = new Date();
-var cur_hour = 0;
-var cur_min = 0;
-var cTime = 0;
-var gTime = 0;
-var tTime = 0;
-var rTime = 0;
-var get_t_Time = new Date();
-var get_c_Time = new Date();
-var updateInterval = 3; // in s
+var info = $('#info span');
+var speedBar = $('#speed');
+
+// User inputs
+var destination = null;
+var targetTime;
+
+// Internal states
 var curSpeed; // in m/s
 var curLoc;
-var curTimeStamp;
-var info = $('#info span');
-var gSpeed = 1.34112;
+
+// Math constants
+var updateInterval = 3; // in s
+var notifyInterval = 30; // in s
+var timeWindow = 90;
+
+// UI states
+var goClicked = false;
 
 function trackingRoutine() {
 	var options = {
@@ -39,14 +39,16 @@ function success(position) {
 	var lat = position.coords.latitude;
 	var lng = position.coords.longitude;
 
-//	console.log("Your position has changed to " + lat + " " + lng);
-//	info.empty().append("Your position has changed to"+ lat + " " + lng);
+	// console.log("Your position has changed to " + lat + " " + lng);
+	// info.empty().append("Your position has changed to"+ lat + " " + lng);
 
 	if (curLoc != null) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng())
 		curSpeed = distance / updateInterval;
-//		console.log("You are now walking at speed " + curSpeed + "m/s");
-//		info.empty().append("You are now walking at speed "+ curSpeed + "m/s");
+		speedBar.empty().append("You are travelling at speed " + curSpeed + "m/s");
+		// console.log("You are now walking at speed " + curSpeed + "m/s");
+		// info.empty().append("You are now walking at speed "+ curSpeed +
+		// "m/s");
 	}
 	curLoc = new google.maps.LatLng(lat, lng);
 
@@ -107,19 +109,15 @@ function addBlueMarker(latlng) {
 
 function calcRoute() {
 
-//	alert("you click the go!");
-	tTime = document.getElementById("time").value;
-	cTime = getCurrentTime();
-	get_t_Time = setTime(tTime);
-	get_c_Time = setTime(cTime);
+	goClicked = true;
 	
-	if (get_t_Time<=get_c_Time)
-	{
-		alert("target time is less than current time!");
-	}
-
-	if (origin == null) {
-		origin = curLoc;
+	if (targetTime == null) {
+		alert("Click on the time setting to add your target time");
+		targetTime = new Date();
+		var str = document.getElementById("time");
+		targetTime.setHours(str.split(":")[0], str.split(":")[1], 0);
+		// TODO check current time is before target time
+		return;
 	}
 
 	if (destination == null) {
@@ -127,12 +125,18 @@ function calcRoute() {
 		return;
 	}
 
+	routeUpdateRoutine();
+
+	clearMarkers();
+}
+
+function updateRouteOnMap() {
 	var mode = google.maps.DirectionsTravelMode.WALKING;
 
 	var request = {
-		origin : origin,
+		origin : curLoc,
 		destination : destination,
-		waypoints : waypoints,
+		waypoints : [],
 		travelMode : mode,
 		optimizeWaypoints : true,
 	};
@@ -140,23 +144,41 @@ function calcRoute() {
 	directionsService.route(request, function(response, status) {
 		if (status == google.maps.DirectionsStatus.OK) {
 			directionsDisplay.setDirections(response);
-			gTime = response.routes[0].legs[0].duration.value;
-			update(0,get_c_Time,get_t_Time,gTime);
-			console.log(gTime);
-//			info.empty().append("Google Time: " + gTime + " secs");
+			var gTime = response.routes[0].legs[0].duration.value;
+			var timeToDest = (targetTime.getTime() - new Date().getTime()) / 1000;
+			if(timeToDest - gTime > timeWindow){
+				tooEarly(timeToDest - gTime);
+			} else if(timeToDest - gTime < -timeWindow){
+				tooLate(gTime - timeToDest);
+			} else{
+				justOk();
+			}
 		}
 	});
-
-	clearMarkers();
-	directionsVisible = true;
-	
 }
 
-function updateMode() {
-	if (directionsVisible) {
-		calcRoute();
-	}
+function tooEarly(min){
+	info.parent().parent().addClass('relax');
+	info.empty().append("Relax! You will arrive at your location " + min + " mins earlier :)");
 }
+
+function tooLate(min){
+	info.parent().addClass('hurry');
+	info.empty().append("Hurry! You will arrive at your destination " + min + " mins late!");
+}
+
+function justOk(){
+	info.parent().addClass('ontime');
+	info.empty().append("Just keep up, you will be on time :)");
+}
+
+function routeUpdateRoutine() {
+	updateRouteOnMap();
+	setInterval(new function() {
+		updateRouteOnMap();
+	}, notifyInterval * 1000);
+}
+
 
 function clearMarkers() {
 	for (var i = 0; i < markers.length; i++) {
@@ -166,10 +188,7 @@ function clearMarkers() {
 
 function clearWaypoints() {
 	markers = [];
-	origin = null;
 	destination = null;
-	waypoints = [];
-	directionsVisible = false;
 }
 
 function reset() {
@@ -183,7 +202,7 @@ function reset() {
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
-			origin = new google.maps.LatLng(position.coords.latitude,
+			var origin = new google.maps.LatLng(position.coords.latitude,
 					position.coords.longitude);
 			map.setCenter(origin);
 			addMarker(origin);
@@ -204,21 +223,19 @@ function stop() {
 function getCurrentTime() {
 	cur_hour = date.getHours();
 	cur_min = date.getMinutes();
-	var time = cur_hour+":"+cur_min;
+	var time = cur_hour + ":" + cur_min;
 	return time;
 }
 
-function setTime(time)
-{
+function setTime(time) {
 	var time_array = new Array();
 	time_array = time.split(":");
 	var tar_hour = time_array[0];
 	var tar_min = time_array[1];
 	var TTime = new Date();
-	TTime.setHours(time_array[0],time_array[1]);
+	TTime.setHours(time_array[0], time_array[1]);
 	return TTime;
 }
-	
 
 function vibration_slow() {
 	// var supportsVibrate = "vibrate" in navigator;
