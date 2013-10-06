@@ -197,7 +197,6 @@ function resetAll() {
 
 function stop() {
 	resetAll();
-	reset();
 	info.parent().parent().removeAttr('class');
 	info.parent().toggle().siblings().toggle();
 }
