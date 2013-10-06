@@ -178,21 +178,27 @@ function updateRouteOnMap() {
 }
 
 function tooEarly(sec) {
-	info.parent().parent().addClass('relax');
+	clearTimeout(f);
+	flash('slow');
+	info.parent().parent().removeAttr('class').addClass('relax');
 	info.empty().append(
 			"Relax! You will arrive at your location " + Math.round(sec / 60)
 					+ " mins earlier :)");
 }
 
 function tooLate(sec) {
-	info.parent().addClass('hurry');
+	clearTimeout(f);
+	flash('fast');
+	info.parent().parent().removeAttr('class').addClass('hurry');
 	info.empty().append(
 			"Hurry! You will arrive at your destination "
 					+ Math.round(sec / 60) + " mins late!");
 }
 
 function justOk() {
-	info.parent().addClass('ontime');
+	clearTimeout(f);
+	flash('medium');
+	info.parent().parent().removeAttr('class').addClass('ontime');
 	info.empty().append("Just keep up, you will be on time :)");
 }
 
