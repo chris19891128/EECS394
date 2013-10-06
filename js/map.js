@@ -243,6 +243,7 @@ function resetAll() {
 	} else {
 		handleNoGeolocation(false);
 	}
+	clearTimeout(f);
 }
 
 function stop() {
