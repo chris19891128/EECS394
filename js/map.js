@@ -44,7 +44,7 @@ function success(position) {
 
 	if (curLoc != null) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng())
-		curSpeed = distance / updateInterval;
+		curSpeed = Math.round( distance / updateInterval * 10 ) / 10;
 		speedBar.empty().append(
 				"You are travelling at speed " + curSpeed + "m/s");
 		// console.log("You are now walking at speed " + curSpeed + "m/s");
