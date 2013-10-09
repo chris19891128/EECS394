@@ -15,11 +15,15 @@ var targetTime;
 // Internal states
 var curSpeed; // in m/s
 var curLoc;
+var accDistance; // in m, accumulated distance traveled
+var accTime; // in s, accumulated time spent
+var avgSpeed; // in s
 
 // Math constants
-var updateInterval = 3; // in s
+var updateInterval = 5; // in s
 var notifyInterval = 10; // in s
 var timeWindow = 90;
+var defSpeed = 1.3; // in m/s
 
 // UI states
 var goClicked = false;
@@ -41,16 +45,14 @@ function success(position) {
 	var lng = position.coords.longitude;
 
 	// console.log("Your position has changed to " + lat + " " + lng);
-	// info.empty().append("Your position has changed to"+ lat + " " + lng);
 
 	if (curLoc != null) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng());
-		curSpeed = Math.round( distance / updateInterval * 10 ) / 10;
+		accDistance = accDistance + distance;
+		accTime = accTime + updateInterval;
+		curSpeed = distance / updateInterval;
 		speedBar.empty().append(
-				"You are travelling at speed " + curSpeed + "m/s");
-		// console.log("You are now walking at speed " + curSpeed + "m/s");
-		// info.empty().append("You are now walking at speed "+ curSpeed +
-		// "m/s");
+				"You are travelling at speed " + Math.round( curSpeed * 10 ) / 10 + "m/s");
 	}
 	curLoc = new google.maps.LatLng(lat, lng);
 
@@ -90,7 +92,10 @@ function initialize() {
 			addMarker(destination);
 		}
 	});
-
+	
+	accDistance = 0;
+	accTime = 0;
+	avgSpeed = defSpeed;
 	trackingRoutine();
 }
 
@@ -134,7 +139,8 @@ function calcRoute() {
 		alert("Click on the map to add an end point");
 		return;
 	}
-
+	
+	google.maps.event.removeListener(listener);
 	routeUpdateRoutine();
 
 	info.parent().toggle().siblings().toggle();
@@ -152,19 +158,18 @@ function updateRouteOnMap() {
 		travelMode : mode,
 		optimizeWaypoints : true,
 	};
-	google.maps.event.removeListener(listener);
 
 	directionsService.route(request,
 			function(response, status) {
 				if (status == google.maps.DirectionsStatus.OK) {
 					directionsDisplay.setDirections(response);
-					var gTime = response.routes[0].legs[0].duration.value;
+					var adjTime = response.routes[0].legs[0].distance.value / avgSpeed;
 					var timeToDest = (targetTime.getTime() - new Date()
 							.getTime()) / 1000;
-					if (timeToDest - gTime > timeWindow) {
-						tooEarly(timeToDest - gTime);
-					} else if (timeToDest - gTime < 0 -timeWindow) {
-						tooLate(gTime - timeToDest);
+					if (timeToDest - adjTime > timeWindow) {
+						tooEarly(timeToDest - adjTime);
+					} else if (timeToDest - adjTime < 0 -timeWindow) {
+						tooLate(adjTime - timeToDest);
 					} else {
 						justOk();
 					}
@@ -226,6 +231,9 @@ function resetAll() {
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 	document.getElementById("input").reset();
 	targetTime=null;
+	accDistance = 0;
+	accTime = 0;
+	avgSpeed = defSpeed;
 
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
