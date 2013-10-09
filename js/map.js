@@ -106,13 +106,6 @@ function addBlueMarker(latlng) {
 	if (blueMarker != null) {
 		blueMarker.setMap(null);
 	}
-	// blueMarker = new google.maps.Circle({
-	// center : latlng,
-	// map : map,
-	// clickable : false,
-	// fillColor : '#0fb0f2',
-	// radius : 4,
-	// })
 	blueMarker = new google.maps.Marker({
 		position : latlng,
 		map : map,
@@ -261,14 +254,4 @@ function stop() {
 	});
 	info.parent().parent().removeAttr('class');
 	info.parent().toggle().siblings().toggle();
-}
-
-function vibration_slow() {
-	// var supportsVibrate = "vibrate" in navigator;
-	// alert("supportsVibrate: " + supportsVibrate);
-	navigator.vibrate(1000);
-}
-
-function vibration_fast() {
-	navigator.vibrate(2000);
 }
