@@ -4,6 +4,7 @@ var directionsService = new google.maps.DirectionsService();
 var map;
 var markers = [];
 var blueMarker;
+var listener;
 var info = $('#msg');
 var speedBar = $('#speed');
 
@@ -17,7 +18,7 @@ var curLoc;
 
 // Math constants
 var updateInterval = 3; // in s
-var notifyInterval = 30; // in s
+var notifyInterval = 10; // in s
 var timeWindow = 90;
 
 // UI states
@@ -43,7 +44,7 @@ function success(position) {
 	// info.empty().append("Your position has changed to"+ lat + " " + lng);
 
 	if (curLoc != null) {
-		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng())
+		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng());
 		curSpeed = Math.round( distance / updateInterval * 10 ) / 10;
 		speedBar.empty().append(
 				"You are travelling at speed " + curSpeed + "m/s");
@@ -141,6 +142,7 @@ function calcRoute() {
 }
 
 function updateRouteOnMap() {
+	console.log('updated');
 	var mode = google.maps.DirectionsTravelMode.WALKING;
 
 	var request = {
@@ -161,7 +163,7 @@ function updateRouteOnMap() {
 							.getTime()) / 1000;
 					if (timeToDest - gTime > timeWindow) {
 						tooEarly(timeToDest - gTime);
-					} else if (timeToDest - gTime < -timeWindow) {
+					} else if (timeToDest - gTime < 0 -timeWindow) {
 						tooLate(gTime - timeToDest);
 					} else {
 						justOk();
