@@ -215,7 +215,8 @@ function clearWaypoints() {
 	destination = null;
 }
 
-function resetAll() {
+function resetAll() {	
+	//stop_flash();
 	clearMarkers();
 	clearWaypoints();
 	directionsDisplay.setMap(null);
@@ -239,9 +240,14 @@ function resetAll() {
 		handleNoGeolocation(false);
 	}
 	clearTimeout(f);
+	//stop_flash();
+	//flash('stop');
 }
 
 function stop() {
+	info.parent().parent().removeAttr('class');
+	info.parent().toggle().siblings().toggle();
+	clearTimeout(f);
 	resetAll();
 	listener = google.maps.event.addListener(map, 'click', function(event) {
 		if (destination == null) {
@@ -254,6 +260,6 @@ function stop() {
 			addMarker(destination);
 		}
 	});
-	info.parent().parent().removeAttr('class');
-	info.parent().toggle().siblings().toggle();
+	 location.reload();
+	//flash('stop');
 }
