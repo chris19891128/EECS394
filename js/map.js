@@ -192,7 +192,7 @@ function updateRouteOnMap() {
 }
 
 function tooEarly(sec) {
-	clearTimeout(f);
+//	clearTimeout(f);
 	flash('slow');
 	info.parent().parent().removeAttr('class').addClass('relax');
 	info.empty().append(
@@ -201,7 +201,7 @@ function tooEarly(sec) {
 }
 
 function tooLate(sec) {
-	clearTimeout(f);
+//	clearTimeout(f);
 	flash('fast');
 	info.parent().parent().removeAttr('class').addClass('hurry');
 	info.empty().append(
@@ -210,20 +210,15 @@ function tooLate(sec) {
 }
 
 function justOk() {
-	clearTimeout(f);
+//	clearTimeout(f);
 	flash('medium');
 	info.parent().parent().removeAttr('class').addClass('ontime');
 	info.empty().append("Just keep up, you will be on time :)");
 }
 
 function routeUpdateRoutine() {
-<<<<<<< HEAD
-	//updateRouteOnMap();
-	setInterval(new function() {
-=======
 	updateRouteOnMap();
 	setInterval(function() {
->>>>>>> 138891d9d2b995afef86c067644a8ff6a29245c2
 		updateRouteOnMap();
 	}, notifyInterval * 1000);
 }
@@ -271,7 +266,7 @@ function resetAll() {
 function stop() {
 	info.parent().parent().removeAttr('class');
 	info.parent().toggle().siblings().toggle();
-	clearTimeout(f);
+	//clearTimeout(f);
 	resetAll();
 	listener = google.maps.event.addListener(map, 'click', function(event) {
 		if (destination == null) {
