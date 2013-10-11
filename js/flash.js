@@ -1,32 +1,39 @@
-var f; //SetTimeout
+var flashBody = $('#ui');
+var betweenFlashInterval = {
+	slow : 1200,
+	medium : 800,
+	fast : 300
+};
+var withinFlashInterval = {
+	slow : 150,
+	medium : 100,
+	fast : 80
+};
+var curFlashId;
+
+function flashOnce(conf) {
+	setTimeout(function() {
+		flashBody.animate({
+			opacity : 0
+		}, withinFlashInterval[conf])
+	}, 0);
+	setTimeout(function() {
+		flashBody.animate({
+			opacity : 1
+		}, withinFlashInterval[conf]);
+	}, withinFlashInterval[conf]);
+}
 
 function flash(conf) {
-	if (conf == "slow") {
-//		navigator.vibrate(500);
-		info.parent().parent().animate({opacity: 0},150,function(){
-			info.parent().parent().animate({opacity: 1}, 150, function(){
-			f = setTimeout(function(){
-					flash("slow");
-				},1200);
-			});
-		});
-	} else if (conf == "medium") {
-//		navigator.vibrate(200);
-		info.parent().parent().animate({opacity: 0},100,function(){
-			info.parent().parent().animate({opacity: 1}, 100, function(){
-			f = setTimeout(function(){
-					flash("medium");
-				},800);
-			});
-		});
-	} else if (conf == "fast"){
-//		navigator.vibrate(200);
-		info.parent().parent().animate({opacity: 0},80,function(){
-			info.parent().parent().animate({opacity: 1}, 80, function(){
-			f = setTimeout(function(){
-					flash("fast");
-				},300);
-			});
-		});		
+	curFlashId = setTimeInterval(function() {
+		flashOnce(conf);
+	}, betweenFlashInterval[conf]);
+}
+
+function stopFlash() {
+	if (curFlashId != null) {
+		clearInterval(curFlashId);
+	} else {
+		console.error("You tried to stop a non-existing flasing thread");
 	}
 }
