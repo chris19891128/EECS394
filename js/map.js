@@ -41,6 +41,7 @@ function trackingRoutine() {
 }
 
 function success(position) {
+	console.log("position updated " + new Date());
 	var lat = position.coords.latitude;
 	var lng = position.coords.longitude;
 
@@ -159,7 +160,6 @@ function calcRoute() {
 }
 
 function updateRouteOnMap() {
-	console.log('updated');
 	var mode = google.maps.DirectionsTravelMode.WALKING;
 
 	var request = {
@@ -173,6 +173,7 @@ function updateRouteOnMap() {
 	directionsService.route(request,
 			function(response, status) {
 				if (status == google.maps.DirectionsStatus.OK) {
+					console.log("route calculated " + new Date());
 					directionsDisplay.setDirections(response);
 					var adjTime = response.routes[0].legs[0].distance.value / avgSpeed;
 					var timeToDest = (targetTime.getTime() - new Date()
@@ -214,7 +215,7 @@ function justOk() {
 }
 
 function routeUpdateRoutine() {
-	updateRouteOnMap();
+	//updateRouteOnMap();
 	setInterval(new function() {
 		updateRouteOnMap();
 	}, notifyInterval * 1000);
