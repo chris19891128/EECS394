@@ -96,7 +96,18 @@ function initialize() {
 	accDistance = 0;
 	accTime = 0;
 	avgSpeed = defSpeed;
-	trackingRoutine();
+	//trackingRoutine();
+	locatePosition();
+}
+
+function locatePosition()
+{
+	var options = {
+		enableHighAccuracy : true,
+		timeout : 5000,
+		maximumAge : 0
+	};
+	navigator.geolocation.getCurrentPosition(success, fail, options);
 }
 
 function addMarker(latlng) {
@@ -122,7 +133,7 @@ function addBlueMarker(latlng) {
 function calcRoute() {
 
 	goClicked = true;
-
+	trackingRoutine();
 	if (targetTime == null) {
 		var str = document.getElementById("time").value;
 		if (str == null) {
@@ -247,9 +258,6 @@ function resetAll() {
 	} else {
 		handleNoGeolocation(false);
 	}
-	clearTimeout(f);
-	//stop_flash();
-	//flash('stop');
 }
 
 function stop() {
@@ -269,5 +277,4 @@ function stop() {
 		}
 	});
 	 location.reload();
-	//flash('stop');
 }
