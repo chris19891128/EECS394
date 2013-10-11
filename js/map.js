@@ -53,7 +53,8 @@ function success(position) {
 		accTime = accTime + updateInterval;
 		curSpeed = distance / updateInterval;
 		speedBar.empty().append(
-				"You are travelling at speed " + Math.round( curSpeed * 10 ) / 10 + "m/s");
+				"You are travelling at speed " + Math.round(curSpeed * 10) / 10
+						+ "m/s");
 	}
 	curLoc = new google.maps.LatLng(lat, lng);
 
@@ -93,16 +94,14 @@ function initialize() {
 			addMarker(destination);
 		}
 	});
-	
+
 	accDistance = 0;
 	accTime = 0;
 	avgSpeed = defSpeed;
-	//trackingRoutine();
 	locatePosition();
 }
 
-function locatePosition()
-{
+function locatePosition() {
 	var options = {
 		enableHighAccuracy : true,
 		timeout : 5000,
@@ -134,7 +133,7 @@ function addBlueMarker(latlng) {
 function calcRoute() {
 
 	goClicked = true;
-	trackingRoutine();
+	
 	if (targetTime == null) {
 		var str = document.getElementById("time").value;
 		if (str == null) {
@@ -151,10 +150,12 @@ function calcRoute() {
 		alert("Click on the map to add an end point");
 		return;
 	}
-	
-	google.maps.event.removeListener(listener);
-	routeUpdateRoutine();
 
+	google.maps.event.removeListener(listener);
+	
+	routeUpdateRoutine();
+	trackingRoutine();
+	
 	info.parent().toggle().siblings().toggle();
 	clearMarkers();
 }
@@ -175,12 +176,13 @@ function updateRouteOnMap() {
 				if (status == google.maps.DirectionsStatus.OK) {
 					console.log("route calculated " + new Date());
 					directionsDisplay.setDirections(response);
-					var adjTime = response.routes[0].legs[0].distance.value / avgSpeed;
+					var adjTime = response.routes[0].legs[0].distance.value
+							/ avgSpeed;
 					var timeToDest = (targetTime.getTime() - new Date()
 							.getTime()) / 1000;
 					if (timeToDest - adjTime > timeWindow) {
 						tooEarly(timeToDest - adjTime);
-					} else if (timeToDest - adjTime < 0 -timeWindow) {
+					} else if (timeToDest - adjTime < 0 - timeWindow) {
 						tooLate(adjTime - timeToDest);
 					} else {
 						justOk();
@@ -215,8 +217,13 @@ function justOk() {
 }
 
 function routeUpdateRoutine() {
+<<<<<<< HEAD
 	//updateRouteOnMap();
 	setInterval(new function() {
+=======
+	updateRouteOnMap();
+	setInterval(function() {
+>>>>>>> 138891d9d2b995afef86c067644a8ff6a29245c2
 		updateRouteOnMap();
 	}, notifyInterval * 1000);
 }
@@ -232,8 +239,8 @@ function clearWaypoints() {
 	destination = null;
 }
 
-function resetAll() {	
-	//stop_flash();
+function resetAll() {
+	// stop_flash();
 	clearMarkers();
 	clearWaypoints();
 	directionsDisplay.setMap(null);
@@ -242,7 +249,7 @@ function resetAll() {
 	directionsDisplay.setMap(map);
 	directionsDisplay.setPanel(document.getElementById("directionsPanel"));
 	document.getElementById("input").reset();
-	targetTime=null;
+	targetTime = null;
 	accDistance = 0;
 	accTime = 0;
 	avgSpeed = defSpeed;
@@ -277,5 +284,5 @@ function stop() {
 			addMarker(destination);
 		}
 	});
-	 location.reload();
+	location.reload();
 }
