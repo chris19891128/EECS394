@@ -215,7 +215,7 @@ function justOk() {
 
 function routeUpdateRoutine() {
 	updateRouteOnMap();
-	setInterval(new function() {
+	setInterval(function() {
 		updateRouteOnMap();
 	}, notifyInterval * 1000);
 }
