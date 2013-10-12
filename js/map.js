@@ -2,6 +2,7 @@ var marker;
 var blueMarker;
 var listener;
 
+
 function registerMapClickListener() {
 	listener = google.maps.event.addListener(map, 'click', function(event) {
 		clearMarkers();
@@ -38,3 +39,4 @@ function removeBlueMarker() {
 		blueMarker.setMap(null);
 	}
 }
+
