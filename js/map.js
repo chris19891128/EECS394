@@ -72,12 +72,11 @@ function removeBlueMarker() {
 }
 
 function startRecalRoute(interval) {
+	recalRoute();
 	if (interval > 0) {
 		routingId = setInterval(function() {
 			recalRoute();
 		}, interval * 1000);
-	} else {
-		recalRoute();
 	}
 }
 
@@ -114,14 +113,13 @@ function startTracking(interval) {
 		maximumAge : 0
 	};
 
+	navigator.geolocation.getCurrentPosition(trackingSuccess, trackingFailure,
+			options);
 	if (interval > 0) {
 		trackingId = setInterval(function() {
 			navigator.geolocation.getCurrentPosition(trackingSuccess,
 					trackingFailure, options);
 		}, interval * 1000);
-	} else {
-		navigator.geolocation.getCurrentPosition(trackingSuccess,
-				trackingFailure, options);
 	}
 }
 
@@ -137,7 +135,7 @@ function trackingSuccess(position) {
 	var lat = position.coords.latitude;
 	var lng = position.coords.longitude;
 	console.log("Position changed (" + lat + "," + lng + ")");
-	
+
 	// Logic part
 	updateCurrentPosition(lat, lng);
 

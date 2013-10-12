@@ -47,10 +47,10 @@ function decide(response) {
 	var adjTime = response.routes[0].legs[0].distance.value / avgSpeed;
 	var timeToDest = (targetTime.getTime() - new Date().getTime()) / 1000;
 	if (timeToDest - adjTime > timeWindow) {
-		return "early";
+		return ["early", timeToDest - adjTime];
 	} else if (timeToDest - adjTime < 0 - timeWindow) {
-		return "late";
+		return ["late", adjTime - timeToDest];
 	} else {
-		return "ok";
+		return ["ok"];
 	}
 }

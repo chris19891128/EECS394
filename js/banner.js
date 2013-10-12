@@ -25,10 +25,10 @@ function justOk() {
 
 function updateSuggestion(response){
 	var decision = decide(response);
-	if (decision == "early") {
-		tooEarly(timeToDest - adjTime);
-	} else if (decision == "late") {
-		tooLate(adjTime - timeToDest);
+	if (decision[0] == "early") {
+		tooEarly(decision[1]);
+	} else if (decision[0] == "late") {
+		tooLate(decision[1]);
 	} else {
 		justOk();
 	}

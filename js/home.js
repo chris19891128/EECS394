@@ -1,4 +1,4 @@
-var notifyInterval = 10; // in s
+var notifyInterval = 1000; // in s
 var updateInterval = 5; // in s
 
 function startWalking() {

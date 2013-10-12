@@ -12,7 +12,6 @@ var curFlashId;
 
 function flashOnce(conf) {
 	setTimeout(function() {
-		console.log("id is " + $('#ui').html());
 		$('#ui').animate({
 			opacity : 0
 		}, withinFlashInterval[conf]);
