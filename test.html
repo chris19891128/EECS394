@@ -1,36 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Bootstrap 101 Template</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OnTime Walker</title>
+<meta name="viewport" content="width=device-width">
+<meta name="apple-mobile-web-app-capable" content="yes" />
 <!-- Bootstrap -->
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" href="css/font-awesome.min.css">
-<link rel="stylesheet" href="map.css">
-<script>
-	var options = {
-		enableHighAccuracy : true,
-		timeout : 10000,
-		maximumAge : 0
-	};
-
-	function success(pos) {
-		var crd = pos.coords;
-
-		console.log('Your current position is:');
-		console.log('Latitude : ' + crd.latitude);
-		console.log('Longitude: ' + crd.longitude);
-		console.log('More or less ' + crd.accuracy + ' meters.');
-	};
-
-	function error(err) {
-		console.warn('ERROR(' + err.code + '): ' + err.message);
-	};
-	setInterval(function() {
-		navigator.geolocation.getCurrentPosition(success, error, options)
-	}, 10000);
-</script>
+<link rel="stylesheet" href="css/map.css">
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script
+	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+<script
+	src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/geolocationmarker/src/geolocationmarker-compiled.js"></script>
+<script src="js/banner.js"></script>
+<script src="js/home.js"></script>
+<script src="js/map.js"></script>
+<script src="js/math.js"></script>
+<script src="js/walker.js"></script>
 </head>
-<body>
+
+<body style="font-family: sans-serif;">
+	<div id="ui">
+		<form class="form-inline" role="form" id="input">
+			Arrive at: <input type="time" value="" id="time" />
+			<button type="button" class="btn btn-default" onclick="calcRoute()">Go</button>
+			<button type="button" class="btn btn-default" onclick="resetAll()">Reset</button>
+		</form>
+		<div id="info">
+			<span id="msg"></span> <span id="speed"></span>
+			<button id="stop" class="btn btn-default" onclick="stop()">Stop</button>
+		</div>
+	</div>
+	<div id="map_canvas"></div>
+	<div id="directionsPanel"></div>
+	<script>
+		/* $('#ui').animate({
+			opacity : 0
+		}, 1000, function() {
+			console.log("finish dim");
+		}); */
+		flashOnce('slow');
+	</script>
 </body>
 </html>

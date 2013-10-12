@@ -13,22 +13,31 @@ var withinFlashInterval = {
 };
 var curFlashId;
 
-
 function flashOnce(conf) {
-	setTimeout(function() {
+	//setTimeout(function() {
+		console.log("dim");
+		console.log("id is " + flashBody.html());
 		flashBody.animate({
-			opacity : 0
-		}, withinFlashInterval[conf])
-	}, 0);
-	setTimeout(function() {
-		flashBody.animate({
+			background : '#0fb0f2',
 			opacity : 1
-		}, withinFlashInterval[conf]);
-	}, withinFlashInterval[conf]);
+		}, 1200, function() {
+			console.log("finish dim");
+		});
+//	}, 0);
+
+	// setTimeout(function() {
+	// console.log("light");
+	// flashBody.animate({
+	// background : '#f35a16',
+	// opacity : 1
+	// }, withinFlashInterval[conf], function() {
+	// console.log("finish light");
+	// });
+	// }, withinFlashInterval[conf]);
 }
 
 function flash(conf) {
-	curFlashId = setTimeInterval(function() {
+	curFlashId = setInterval(function() {
 		flashOnce(conf);
 	}, betweenFlashInterval[conf]);
 }
@@ -40,7 +49,6 @@ function stopFlash() {
 		console.error("You tried to stop a non-existing flasing thread");
 	}
 }
-
 
 function tooEarly(sec) {
 	clearTimeout(f);
