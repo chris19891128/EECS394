@@ -15,13 +15,15 @@
 <script
 	src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/geolocationmarker/src/geolocationmarker-compiled.js"></script>
 <script src="js/banner.js"></script>
+<script src="js/math.js"></script>
+<script src="js/flash.js"></script>
 <script src="js/home.js"></script>
 <script src="js/map.js"></script>
-<script src="js/math.js"></script>
 <script src="js/walker.js"></script>
+<script src="js/test.js"></script>
 </head>
 
-<body style="font-family: sans-serif;">
+<body onload="test()" style="font-family: sans-serif;">
 	<div id="ui">
 		<form class="form-inline" role="form" id="input">
 			Arrive at: <input type="time" value="" id="time" />
@@ -35,13 +37,5 @@
 	</div>
 	<div id="map_canvas"></div>
 	<div id="directionsPanel"></div>
-	<script>
-		/* $('#ui').animate({
-			opacity : 0
-		}, 1000, function() {
-			console.log("finish dim");
-		}); */
-		flashOnce('slow');
-	</script>
 </body>
 </html>
