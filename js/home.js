@@ -30,7 +30,7 @@ function startWalking() {
 		startRecalRoute(notifyInterval);
 	}, 2000);
 
-	info.parent().toggle().siblings().toggle();
+	$('#msg').parent().toggle().siblings().toggle();
 
 }
 

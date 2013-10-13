@@ -33,3 +33,7 @@ function updateSuggestion(response){
 		justOk();
 	}
 }
+
+function updateSpeed(speed){
+	$('speed').empty().append("You are travelling at ")
+}
