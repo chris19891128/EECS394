@@ -94,7 +94,7 @@ function routingSuccess(response, status) {
 	console.log("routing success");
 	if (status == google.maps.DirectionsStatus.OK) {
 		directionsDisplay.setDirections(response);
-		updateSuggestion(response); // banner do stuff
+		updateSuggestionBanner(response); // banner do stuff
 	}
 }
 
@@ -143,9 +143,7 @@ function trackingSuccess(position) {
 	var center = new google.maps.LatLng(lat, lng);
 	map.setCenter(center);
 	moveBlueMarker(center);
-	$('speed').empty().append(
-			"You are travelling at speed " + Math.round(curSpeed * 10) / 10
-					+ "m/s");
+	updateSpeedBanner();
 }
 
 function trackingFailure(position) {

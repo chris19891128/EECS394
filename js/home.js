@@ -1,4 +1,4 @@
-var notifyInterval = 1000; // in s
+var notifyInterval = 10; // in s
 var updateInterval = 5; // in s
 
 function startWalking() {
@@ -20,16 +20,15 @@ function startWalking() {
 		destination = marker.position;
 	}
 
-	setWalkingSession();
-
 	google.maps.event.removeListener(listener);
 	clearMarkers();
 
+	setWalkingSession();
 	startTracking(updateInterval);
-	setTimeout(function() {
-		startRecalRoute(notifyInterval);
-	}, 2000);
-
+	setTimeout(function(){
+			startRecalRoute(notifyInterval)
+	},1000);
+	
 	$('#msg').parent().toggle().siblings().toggle();
 
 }

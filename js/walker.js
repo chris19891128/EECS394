@@ -30,8 +30,9 @@ function updateCurrentPosition(lat, lng) {
 function setWalkingSession() {
 	accDistance = 0; // in m, accumulated distance traveled
 	accTime = 0; // in s, accumulated time spent
-	avgSpeed = null; // in s
+	avgSpeed = 0; // in s
 	startTime = new Date();
+	curSpeed = 0;
 	inWalk = true;
 }
 
@@ -40,10 +41,15 @@ function resetWalkingSession(){
 	accTime = null; 
 	avgSpeed = null; 
 	startTime = null;
+	curSpeed = null;
+	curLoc = null;
 	inWalk = false;
 }
 
 function decide(response) {
+	if(avgSpeed == null || curLoc == null || curSpeed == null){
+		return ["undefined"];
+	}
 	var adjTime = response.routes[0].legs[0].distance.value / avgSpeed;
 	var timeToDest = (targetTime.getTime() - new Date().getTime()) / 1000;
 	if (timeToDest - adjTime > timeWindow) {
