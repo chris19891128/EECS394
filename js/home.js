@@ -26,7 +26,9 @@ function startWalking() {
 	clearMarkers();
 
 	startTracking(updateInterval);
-	startRecalRoute(notifyInterval);
+	setTimeout(function() {
+		startRecalRoute(notifyInterval);
+	}, 2000);
 
 	// info.parent().toggle().siblings().toggle();
 

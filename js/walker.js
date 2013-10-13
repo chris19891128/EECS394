@@ -21,8 +21,8 @@ function updateCurrentPosition(lat, lng) {
 		curSpeed = distance / updateInterval;
 		accDistance = accDistance + distance;
 		accTime = (new Date().getTime() - startTime.getTime()) / 1000;
-		accSpeed = accDistance / accTime;
-		console.log("Average speed for the past " + accTime + " seconds");
+		avgSpeed = accDistance / accTime;
+		console.log("Average speed for the past " + accTime + " seconds is " + avgSpeed );
 	}
 	curLoc = new google.maps.LatLng(lat, lng);
 }
