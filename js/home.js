@@ -10,7 +10,10 @@ function startWalking() {
 	} else {
 		targetTime = new Date();
 		targetTime.setHours(str.split(":")[0], str.split(":")[1], 0);
-		// TODO check current time is before target time
+		if(targetTime.getTime() < new Date().getTime()){
+			alert("Target time is earlier than now. You are already late !");
+			return;
+		}
 	}
 
 	if (marker == null) {
@@ -24,30 +27,26 @@ function startWalking() {
 	clearMarkers();
 
 	setWalkingSession();
-	startTracking(updateInterval);
-	setTimeout(function(){
-			startRecalRoute(notifyInterval)
-	},1000);
-	
-	$('#msg').parent().toggle().siblings().toggle();
+	startTrackingPosition(updateInterval, true);
+	startRecalRoute(notifyInterval)
 
+	$('#msg').parent().toggle().siblings().toggle();
 }
 
 function stopWalking() {
-	info.parent().parent().removeAttr('class');
-	info.parent().toggle().siblings().toggle();
-	clearTimeout(f);
+	$('#msg').parent().parent().removeAttr('class');
+	$('#msg').parent().toggle().siblings().toggle();
+	
 	resetAll();
+	
+	resetWalkingSession();
+	stopTrackingPosition();
+	stopRecalRoute();
+	
 	listener = google.maps.event.addListener(map, 'click', function(event) {
-		if (destination == null) {
-			destination = event.latLng;
-			addMarker(destination);
-		} else {
-			markers[0].setMap(null);
-			markers = [];
-			destination = event.latLng;
-			addMarker(destination);
-		}
+		clearMarkers();
+		addMarker(event.latLng);
 	});
+	
 	location.reload();
 }
