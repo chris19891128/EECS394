@@ -23,13 +23,23 @@ function justOk() {
 	$('#msg').empty().append("Just keep up, you will be on time :)");
 }
 
-function updateSuggestion(response){
+function updateSuggestionBanner(response) {
 	var decision = decide(response);
 	if (decision[0] == "early") {
 		tooEarly(decision[1]);
 	} else if (decision[0] == "late") {
 		tooLate(decision[1]);
-	} else {
+	} else if (decision[0] == "ok") {
 		justOk();
+	} else if (decision[0] == "undefined") {
+		// Do nothing here.
+	}
+}
+
+function updateSpeedBanner() {
+	if (curSpeed != null) {
+		$('#speed').empty().append(
+				"You are travelling at speed " + Math.round(curSpeed * 10) / 10
+						+ "m/s");
 	}
 }

@@ -26,12 +26,13 @@
 	<div id="ui">
 		<form class="form-inline" role="form" id="input">
 			Arrive at: <input type="time" value="" id="time" />
-			<button type="button" class="btn btn-default" onclick="startWalking()">Go</button>
-			<button type="button" class="btn btn-default" onclick="stopWalking()">Reset</button>
+			<button type="button" class="btn btn-default"
+				onclick="startWalking()">Go</button>
+			<button type="button" class="btn btn-default">Reset</button>
 		</form>
 		<div id="info">
 			<span id="msg"></span> <span id="speed"></span>
-			<button id="stop" class="btn btn-default" onclick="stop()">Stop</button>
+			<button id="stop" class="btn btn-default" onclick="stopWalking()">Stop</button>
 		</div>
 	</div>
 	<div id="map_canvas"></div>
