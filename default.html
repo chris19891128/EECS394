@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 <head>
 <title>OnTime Walker</title>
 <meta name="viewport" content="width=device-width">
@@ -8,6 +7,7 @@
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link rel="stylesheet" href="css/font-awesome.min.css">
 <link rel="stylesheet" href="css/map.css">
+<<<<<<< HEAD
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -22,9 +22,11 @@
 <script src="js/map.js"></script>
 <script src="js/math.js"></script>
 <script src="js/walker.js"></script>
+=======
+>>>>>>> 6a844514fb36d8d296d98ecb4befefe77ca8e04a
 </head>
 
-<body onload="initialize()" style="font-family: sans-serif;">
+<body onload="initialize()">
 	<div id="ui">
 		<form class="form-inline" role="form" id="input">
 			Arrive at: <input type="time" value="" id="time" />
@@ -33,12 +35,28 @@
 			<button type="button" class="btn btn-default">Reset</button>
 		</form>
 		<div id="info">
-			<span id="msg"></span> <span id="speed"></span>
+			<div id="msg"></div>
+			<div id="detail"></div>
+			<span id="speed"></span>
 			<button id="stop" class="btn btn-default" onclick="stopWalking()">Stop</button>
 		</div>
+		
 	</div>
 	<div id="map_canvas"></div>
 	<div id="directionsPanel"></div>
-
+	
+	<script src="http://code.jquery.com/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script
+		src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
+	<script
+		src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/geolocationmarker/src/geolocationmarker-compiled.js"></script>
+	<script src="js/banner.js"></script>
+	<script src="js/flash.js"></script>
+	<script src="js/home.js"></script>
+	<script src="js/map.js"></script>
+	<script src="js/math.js"></script>
+	<script src="js/walker.js"></script>
 </body>
+
 </html>

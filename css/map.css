@@ -1,3 +1,7 @@
+body {
+	font-family: sans-serif;
+}
+
 #map_canvas{
 	position: absolute;
 	bottom: 0px;
@@ -27,3 +31,7 @@
 .ontime { background: #32cc13; color: #fff;}
 
 #directionsPanel{display: none;}
+
+#speed{ display:none;}
+#stop{display:none;}
+#msg{font-size: 36pt; margin-bottom: 20px;}
