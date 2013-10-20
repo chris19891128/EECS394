@@ -2,7 +2,7 @@ Parse.initialize("XbH3LgwssgZUmFscklHUgX3yAjRa8yyTTx8lOtZi", "AmcmpSx446bhbOJaZw
 function currentUser() {
 	var currentUser = Parse.User.current();
 	if (currentUser) {
-		alert("login already with email " + currentUser.email);
+		alert("login already with email " + currentUser.getEmail());
 	} else {
 		alert("You are not log in");
 	}
@@ -18,7 +18,7 @@ function signUp() {
 
 	user.signUp(null, {
 		success : function(user) {
-			// Hooray! Let them use the app now.
+			alert("SIGNUP success with email " + user.getEmail());
 		},
 		error : function(user, error) {
 			// Show the error message somewhere and let the user try again.
@@ -31,7 +31,7 @@ function logIn() {
 	Parse.User.logIn(document.getElementById("usrname").value, document
 			.getElementById("pwd").value, {
 		success : function(user) {
-			alert("login success with email " + user.email);
+			alert("login success with email " + user.getEmail());
 		},
 		error : function(user, error) {
 			// The login failed. Check error to see why.
