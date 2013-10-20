@@ -24,6 +24,17 @@ body {
 	margin-top: -20px;
 	z-index: 100;
 }
+
+#input {
+	font-size: 120%;
+	margin-top: -24px;
+}
+
+#instruction {
+	margin-left: -6px;
+	margin-bottom: 6px;
+}
+
 #time {width: 100px;}
 #info {display: none; font-size: 14pt; line-height: 120%}
 .relax { background: #0fb0f2; color: #fff;}
@@ -33,5 +44,28 @@ body {
 #directionsPanel{display: none;}
 
 #speed{ display:none;}
-#stop{display:none;}
-#msg{font-size: 36pt; margin-bottom: 20px;}
+#msg, #detail{
+	position: absolute;
+	width: 100%;
+	text-align: center;
+}
+#msg {
+	top: 50%;
+	margin-top: -4px;
+	font-size: 36pt;
+}
+#detail {
+	top: 50%;
+	margin-top: 36px;
+}
+#stop {
+	cursor: pointer;
+	color: rgba(255,255,255,0.4);
+	font-size: 36pt;
+	position: absolute;
+	top: 50%;
+	right: 0%;
+	margin-top: -5px;
+	margin-right: 16px;
+	z-index: 120;
+}

@@ -17,7 +17,7 @@ function startWalking() {
 	}
 
 	if (marker == null) {
-		alert("Click on the map to add an end point");
+		alert("Click on the map to add your destination");
 		return;
 	} else {
 		destination = marker.position;
@@ -31,6 +31,7 @@ function startWalking() {
 	startRecalRoute(notifyInterval)
 
 	$('#msg').parent().toggle().siblings().toggle();
+	$('#cancel').toggle();
 }
 
 function stopWalking() {
