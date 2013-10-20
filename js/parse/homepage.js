@@ -32,6 +32,7 @@ function logIn() {
 			.getElementById("pwd").value, {
 		success : function(user) {
 			alert("login success with email " + user.email);
+			window.navigate("../../default.html");  
 		},
 		error : function(user, error) {
 			// The login failed. Check error to see why.
