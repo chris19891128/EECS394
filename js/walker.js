@@ -62,6 +62,10 @@ function decide(response) {
 	if (avgSpeed == null || curLoc == null || curSpeed == null) {
 		return [ "undefined" ];
 	}
+	if (avgSpeed < 0.5) {
+		return [ "standing" ];
+	}
+
 	var adjTime = response.routes[0].legs[0].distance.value / avgSpeed;
 	var timeToDest = (targetTime.getTime() - new Date().getTime()) / 1000;
 	if (timeToDest - adjTime > timeWindow) {
