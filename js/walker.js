@@ -13,6 +13,7 @@ var curLoc;
 // Math constants
 var timeWindow = 90;
 var defSpeed = 1.3;
+var history = [ def, def, def, def ];
 
 var inWalk = false;
 
@@ -23,7 +24,12 @@ function updateWalkingInfo(lat, lng) {
 		adjustError();
 		accDistance = accDistance + distance;
 		accTime = (new Date().getTime() - startTime.getTime()) / 1000;
-		avgSpeed = accDistance / accTime;
+		var newAvg = accDistance / accTime;
+		avgSpeed = (history[1] + history[2] + history[3] + newAvg) / 4;
+		for (var i = 0; i < 3; i++) {
+			history[i] = history[i + 1];
+		}
+		history[3] = newAvg;
 		console.log("Average speed for the past " + accTime + " seconds is "
 				+ avgSpeed);
 	}
