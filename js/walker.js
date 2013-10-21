@@ -22,14 +22,11 @@ function updateWalkingInfo(lat, lng) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng());
 		curSpeed = distance / updateInterval;
 		adjustError();
-		accDistance = accDistance + distance;
-		accTime = (new Date().getTime() - startTime.getTime()) / 1000;
-		var newAvg = accDistance / accTime;
-		avgSpeed = (history[1] + history[2] + history[3] + newAvg) / 4;
+		avgSpeed = (history[1] + history[2] + history[3] + curSpeed) / 4;
 		for (var i = 0; i < 3; i++) {
 			history[i] = history[i + 1];
 		}
-		history[3] = newAvg;
+		history[3] = curSpeed;
 		console.log("Average speed for the past " + accTime + " seconds is "
 				+ avgSpeed);
 	}
