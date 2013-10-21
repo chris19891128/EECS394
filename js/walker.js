@@ -13,7 +13,7 @@ var curLoc;
 // Math constants
 var timeWindow = 90;
 var defSpeed = 1.3;
-var history = [ def, def, def, def ];
+var history = [ defSpeed, defSpeed, defSpeed, defSpeed ];
 
 var inWalk = false;
 
