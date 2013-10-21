@@ -40,6 +40,7 @@ body {
 .relax { background: #0fb0f2; color: #fff;}
 .hurry { background: #f35a16; color: #fff;}
 .ontime { background: #32cc13; color: #fff;}
+.stand { background: #666; color: #fff;}
 
 #directionsPanel{display: none;}
 

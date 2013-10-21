@@ -28,10 +28,10 @@ function justOk() {
 
 function standing() {
 	stopFlash();
-	flash('fast');
-	$('#ui').removeAttr('class').addClass('hurry');
-	$('#msg').empty().append("You are not walking");
-	$('#detail').empty().append("You will be be definitely late!");
+	flash('slow');
+	$('#ui').removeAttr('class').addClass('stand');
+	$('#msg').empty().append("Not Walking");
+	$('#detail').empty().append("Start moving, or we can't tell");
 }
 
 function updateSuggestionBanner(response) {
