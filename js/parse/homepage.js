@@ -1,4 +1,5 @@
 Parse.initialize("XbH3LgwssgZUmFscklHUgX3yAjRa8yyTTx8lOtZi", "AmcmpSx446bhbOJaZwRsk2o7bUjfsXUfvi0VbEJo");
+
 function currentUser() {
 	var currentUser = Parse.User.current();
 	if (currentUser) {
