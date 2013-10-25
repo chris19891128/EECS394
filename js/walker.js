@@ -13,6 +13,7 @@ var curLoc;
 // Math constants
 var timeWindow = 90;
 var defSpeed = 1.3;
+var history = [ defSpeed, defSpeed, defSpeed, defSpeed ];
 
 var inWalk = false;
 
@@ -21,9 +22,11 @@ function updateWalkingInfo(lat, lng) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng());
 		curSpeed = distance / updateInterval;
 		adjustError();
-		accDistance = accDistance + distance;
-		accTime = (new Date().getTime() - startTime.getTime()) / 1000;
-		avgSpeed = accDistance / accTime;
+		avgSpeed = (history[1] + history[2] + history[3] + curSpeed) / 4;
+		for (var i = 0; i < 3; i++) {
+			history[i] = history[i + 1];
+		}
+		history[3] = curSpeed;
 		console.log("Average speed for the past " + accTime + " seconds is "
 				+ avgSpeed);
 	}
@@ -59,6 +62,10 @@ function decide(response) {
 	if (avgSpeed == null || curLoc == null || curSpeed == null) {
 		return [ "undefined" ];
 	}
+	if (avgSpeed < 0.5) {
+		return [ "standing" ];
+	}
+
 	var adjTime = response.routes[0].legs[0].distance.value / avgSpeed;
 	var timeToDest = (targetTime.getTime() - new Date().getTime()) / 1000;
 	if (timeToDest - adjTime > timeWindow) {
