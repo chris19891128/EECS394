@@ -9,7 +9,6 @@ var avgSpeed = null; // in s
 // Internal states
 var curSpeed; // in m/s
 var curLoc;
-var lastLoc;
 
 // Math constants
 var timeWindow = 90;
@@ -21,20 +20,8 @@ var inWalk = false;
 function updateWalkingInfo(lat, lng) {
 	if (inWalk == true) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng());
-		if (distance > 10) {
-			console.log("Recorded an error position");
-			curSpeed = history[3];
-			var tmp = curLoc;
-			curLoc = new google.maps.LatLng(2 * curLoc.lat() - lastLoc.lat(), 2
-					* curLoc.lng() - lastLoc.lng());
-			lastLoc = tmp;
-		} else {
-			console.log("Recorded a seemingly correct position");
-			curSpeed = distance / updateInterval;
-			adjustError();
-			lastLoc = curLoc;
-			curLoc = new google.maps.LatLng(lat, lng);
-		}
+		curSpeed = distance / updateInterval;
+		adjustError();
 		avgSpeed = (history[1] + history[2] + history[3] + curSpeed) / 4;
 		for (var i = 0; i < 3; i++) {
 			history[i] = history[i + 1];
@@ -42,10 +29,8 @@ function updateWalkingInfo(lat, lng) {
 		history[3] = curSpeed;
 		console.log("Average speed for the past " + accTime + " seconds is "
 				+ avgSpeed);
-	} else {
-		lastLoc = curLock;
-		curLoc = new google.maps.LatLng(lat, lng);
 	}
+	curLoc = new google.maps.LatLng(lat, lng);
 }
 
 function adjustError() {
@@ -70,7 +55,6 @@ function resetWalkingSession() {
 	startTime = null;
 	curSpeed = null;
 	curLoc = null;
-	lastLoc = null;
 	inWalk = false;
 }
 
