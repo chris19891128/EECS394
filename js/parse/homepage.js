@@ -1,4 +1,5 @@
-Parse.initialize("XbH3LgwssgZUmFscklHUgX3yAjRa8yyTTx8lOtZi", "AmcmpSx446bhbOJaZwRsk2o7bUjfsXUfvi0VbEJo");
+Parse.initialize("XbH3LgwssgZUmFscklHUgX3yAjRa8yyTTx8lOtZi",
+		"AmcmpSx446bhbOJaZwRsk2o7bUjfsXUfvi0VbEJo");
 
 function currentUser() {
 	var currentUser = Parse.User.current();
@@ -33,7 +34,7 @@ function logIn() {
 			.getElementById("pwd").value, {
 		success : function(user) {
 			alert("login success with email " + user.email);
-			window.navigate("../../default.html");  
+			window.navigate("../../default.html");
 			alert("login success with email " + user.getEmail());
 		},
 		error : function(user, error) {
