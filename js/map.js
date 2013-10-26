@@ -70,8 +70,7 @@ function resetAll() {
 
 function locatePosition(isCentered) {
 	navigator.geolocation.getCurrentPosition(function(position) {
-		curLoc = new google.maps.LatLng(position.coords.latitude,
-				position.coords.longitude);
+		updateWalkingInfo(position.coords.latitude, position.coords.longitude);
 		updateCurrentPositionOnMap(isCentered)
 	}, function() {
 	}, locatingOptions);
@@ -80,18 +79,24 @@ function locatePosition(isCentered) {
 // Advanced tracking service, used when walking
 
 function trackPosition() {
-	navigator.geolocation.getCurrentPosition(function(position) {
-		console.log("new position");
-		// Logic part
-		updateWalkingInfo(position.coords.latitude, position.coords.longitude);
+	navigator.geolocation.getCurrentPosition(
+			function(position) {
+				console.log("new position " + position.coords.latitude
+						+ " and " + position.coords.longitude);
 
-		// UI part
-		updateCurrentPositionOnMap(false);
-		includeDestination();
-		updateSpeedBanner();
-	}, function() {
-		console.error("Error tracking");
-	}, locatingOptions);
+				var newLat = position.coords.latitude;
+				var newLng = position.coords.longitude;
+
+				// Logic part
+				updateWalkingInfo(newLat, newLng);
+
+				// UI part
+				updateCurrentPositionOnMap(false);
+				//includeDestination();
+				updateSpeedBanner();
+			}, function() {
+				console.error("Error tracking");
+			}, locatingOptions);
 }
 
 function startTrackingPosition(interval) {
@@ -168,14 +173,17 @@ function clearMarkers() {
 }
 
 function moveBlueMarker(latlng) {
-	if (blueMarker != null) {
-		blueMarker.setMap(null);
+	// console.log("Before move " + latlng);
+	if (blueMarker == null) {
+		blueMarker = new google.maps.Marker({
+			position : latlng,
+			map : map,
+			icon : "img/dot.png"
+		});
+	} else {
+		blueMarker.setPosition(latlng);
 	}
-	blueMarker = new google.maps.Marker({
-		position : latlng,
-		map : map,
-		icon : "img/dot.png"
-	});
+	// console.log("After move " + blueMarker.getPosition());
 }
 
 function removeBlueMarker() {
