@@ -42,6 +42,7 @@ function initialize() {
 //distribute id at the beginning.
 function distributeID()
 {
+	addUser();
 	var url =window.location.href; //获得当前url 
 	var URL=url.toString();
 	alert(URL);

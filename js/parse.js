@@ -1,12 +1,14 @@
 Parse.initialize("XbH3LgwssgZUmFscklHUgX3yAjRa8yyTTx8lOtZi", "AmcmpSx446bhbOJaZwRsk2o7bUjfsXUfvi0VbEJo");
-      
+
+function addUser()
+{
 var User = Parse.Object.extend("User");
 var user = new User();
 user.set("StartLocation", 123);
 user.set("Destination", 321);
 user.set("AverageSpeed", 222);
  
-gameScore.save(null, {
+user.save(null, {
   success: function(user) {
     // Execute any logic that should take place after the object is saved.
     alert('New object created with objectId: ' + user.id);
@@ -17,4 +19,4 @@ gameScore.save(null, {
     alert('Failed to create new object, with error code: ' + error.description);
   }
 });
-
+}

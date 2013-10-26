@@ -53,9 +53,6 @@ function changeUrl()
    
 } 
 
-
-
-
 function stopWalking() {
 	$('#msg').parent().parent().removeAttr('class');
 	$('#msg').parent().toggle().siblings().toggle();
