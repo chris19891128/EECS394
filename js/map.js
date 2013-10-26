@@ -18,7 +18,6 @@ var locatingOptions = {
 };
 
 function initialize() {
-	distributeID();
 	if (navigator.userAgent.match(/Android/i)) {
 		window.scrollTo(0, 1);
 	}
@@ -39,25 +38,6 @@ function initialize() {
 	});
 }
 
-//distribute id at the beginning.
-function distributeID()
-{
-	addUser();
-	var url =window.location.href; //获得当前url 
-	var URL=url.toString();
-	alert(URL);
-	if(URL.indexOf("id")==-1){
-		alert("there is no id!");
-		var nc=123;
-		var newadd="?id="+nc;//加到当前url之后 
-		url=url+newadd; 
-		alert(url); 
-		location.replace(url);//装入这个新的url 
-	}else{
-		var id=URL.split("id=");
-		alert(id[1]);
-	   }
-}
 
 function resetAll() {
 	clearMarkers();
@@ -185,7 +165,6 @@ function removeBlueMarker() {
 		blueMarker.setMap(null);
 	}
 }
-
 
 function trackingFailure(position) {
 	console.error("You had an error trying to call the navigator API");

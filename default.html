@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <head>
 <title>OnTime Walker</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+<!--320-->
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <!-- Bootstrap -->
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css">
 <link rel="stylesheet" href="css/map.css">
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="http://www.parsecdn.com/js/parse-1.2.12.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script
 	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
-<script
-	src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/geolocationmarker/src/geolocationmarker-compiled.js"></script>
 <script src="js/parse.js"></script>
 <script src="js/banner.js"></script>
 <script src="js/flash.js"></script>
@@ -26,7 +27,7 @@
 <body onload="initialize();">
 	<div id="ui">
 		<form class="form-inline" role="form" id="input">
-			<div id="instruction">Click on the map to set destination. </div>
+			<div id="instruction">Click on the map to set destination.</div>
 			Arrive before: <input type="time" value="" id="time" />
 			<button type="button" class="btn btn-default"
 				onclick="startWalking()">Go</button>
@@ -35,26 +36,16 @@
 		<div id="info">
 			<div id="msg"></div>
 			<div id="detail"></div>
-			<div id="stop" onclick="stopWalking()"><i class="icon-remove-sign"></i></div>
+			<div id="stop" onclick="stopWalking()">
+				<i class="icon-remove-sign"></i>
+			</div>
 			<span id="speed"></span>
 		</div>
-		
+
 	</div>
 	<div id="map_canvas"></div>
 	<div id="directionsPanel"></div>
-	
-	<script src="http://code.jquery.com/jquery.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
-	<script
-		src="//google-maps-utility-library-v3.googlecode.com/svn/trunk/geolocationmarker/src/geolocationmarker-compiled.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/banner.js"></script>
-	<script src="js/flash.js"></script>
-	<script src="js/home.js"></script>
-	<script src="js/map.js"></script>
-	<script src="js/math.js"></script>
-	<script src="js/walker.js"></script>
 </body>
 
 </html>
