@@ -1,12 +1,9 @@
 Parse.initialize("XbH3LgwssgZUmFscklHUgX3yAjRa8yyTTx8lOtZi",
 		"AmcmpSx446bhbOJaZwRsk2o7bUjfsXUfvi0VbEJo");
 
-var MyUser = Parse.Object.extend("MyUser", {
-	defaults : {
-		avgSpeed : 1.3,
+var UserProfile = Parse.Object.extend("UserProfile");
 
-	}
-});
+var WalkingSession = Parse.Object.extend("WalkingSession");
 
 var user;
 
@@ -24,7 +21,7 @@ function userInit() {
 }
 
 function oldUser(id) {
-	var query = new Parse.Query(MyUser);
+	var query = new Parse.Query(UserProfile);
 	query.get(id,{
 		success : function(u) {
 			user = u;
@@ -36,11 +33,9 @@ function oldUser(id) {
 }
 
 function addUser() {
-	user = new MyUser();
-	user.set("StartLocation", 123);
-	user.set("Destination", 321);
+	user = new UserProfile();
 	user.set("AverageSpeed", 222);
-
+	var rel = user.relation("History");
 	user.save(null, {
 		success : function(u) {
 			location.replace(window.location.href.toString() + "?id=" + u.id);
@@ -51,4 +46,25 @@ function addUser() {
 					+ error.description);
 		}
 	});
+}
+
+function saveWalkingSession(orig_lat, orig_lng, dest_lat, dest_lng, dur, avgspd)
+{
+	var ws = new WalkingSession();
+	ws.set("Origin", [orig_lat, orig_lng]);
+	ws.set("Destination", [dest_lat, dest_lng]);
+	ws.set("Duration", dur);
+	ws.set("AverageSpeed", avgspd);
+	ws.set("User", user);
+	ws.save(null, {
+		success : function(w) {
+			
+		},
+		error : function(w, error) {
+			alert('Failed to save a walking session: ' + error.description);
+		}
+	});
+	var relation = user.relation("History");
+	relation.add(ws);
+	user.save();
 }

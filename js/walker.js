@@ -21,8 +21,10 @@ var inWalk = false;
 function updateWalkingInfo(lat, lng) {
 	if (inWalk == true) {
 		var distance = calDistance(lat, curLoc.lat(), lng, curLoc.lng());
-		if (distance > 10) {
+		if (distance > 30) {
 			console.log("Recorded an error position");
+			console.log("last time location is " + curLoc.lat() + ","
+					+ curLoc.lng());
 			curSpeed = history[3];
 			var tmp = curLoc;
 			curLoc = new google.maps.LatLng(2 * curLoc.lat() - lastLoc.lat(), 2
@@ -40,11 +42,10 @@ function updateWalkingInfo(lat, lng) {
 			history[i] = history[i + 1];
 		}
 		history[3] = curSpeed;
-		console.log("Average speed for the past " + accTime + " seconds is "
-				+ avgSpeed);
+		console.log("Average speed is " + avgSpeed);
 	} else {
-		lastLoc = curLock;
 		curLoc = new google.maps.LatLng(lat, lng);
+		lastLoc = curLoc;
 	}
 }
 

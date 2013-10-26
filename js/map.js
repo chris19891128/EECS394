@@ -25,7 +25,11 @@ function initialize() {
 		zoom : 17,
 		mapTypeId : google.maps.MapTypeId.ROADMAP
 	};
+
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+	initSearchBar();
+
 	locatePosition(true);
 
 	directionsDisplay = new google.maps.DirectionsRenderer();
@@ -36,8 +40,22 @@ function initialize() {
 		clearMarkers();
 		addMarker(event.latLng);
 	});
+
 }
 
+function initSearchBar() {
+	var searchInput = document.getElementById("searchBar");
+	var searchBox = new google.maps.places.SearchBox(searchInput);
+	google.maps.event.addListener(searchBox, 'places_changed', function() {
+		var place = searchBox.getPlaces()[0];
+		addMarker(place.geometry.location);
+		var bounds = new google.maps.LatLngBounds();
+		bounds.extend(place.geometry.location);
+		bounds.extend(curLoc);
+		map.fitBounds(bounds);
+		toggleSearchBar();
+	});
+}
 
 function resetAll() {
 	clearMarkers();
@@ -52,8 +70,7 @@ function resetAll() {
 
 function locatePosition(isCentered) {
 	navigator.geolocation.getCurrentPosition(function(position) {
-		curLoc = new google.maps.LatLng(position.coords.latitude,
-				position.coords.longitude);
+		updateWalkingInfo(position.coords.latitude, position.coords.longitude);
 		updateCurrentPositionOnMap(isCentered)
 	}, function() {
 	}, locatingOptions);
@@ -62,18 +79,24 @@ function locatePosition(isCentered) {
 // Advanced tracking service, used when walking
 
 function trackPosition() {
-	navigator.geolocation.getCurrentPosition(function(position) {
-		console.log("new position");
-		// Logic part
-		updateWalkingInfo(position.coords.latitude, position.coords.longitude);
+	navigator.geolocation.getCurrentPosition(
+			function(position) {
+				console.log("new position " + position.coords.latitude
+						+ " and " + position.coords.longitude);
 
-		// UI part
-		updateCurrentPositionOnMap(false);
-		includeDestination();
-		updateSpeedBanner();
-	}, function() {
-		console.error("Error tracking");
-	}, locatingOptions);
+				var newLat = position.coords.latitude;
+				var newLng = position.coords.longitude;
+
+				// Logic part
+				updateWalkingInfo(newLat, newLng);
+
+				// UI part
+				updateCurrentPositionOnMap(false);
+				//includeDestination();
+				updateSpeedBanner();
+			}, function() {
+				console.error("Error tracking");
+			}, locatingOptions);
 }
 
 function startTrackingPosition(interval) {
@@ -150,14 +173,17 @@ function clearMarkers() {
 }
 
 function moveBlueMarker(latlng) {
-	if (blueMarker != null) {
-		blueMarker.setMap(null);
+	// console.log("Before move " + latlng);
+	if (blueMarker == null) {
+		blueMarker = new google.maps.Marker({
+			position : latlng,
+			map : map,
+			icon : "img/dot.png"
+		});
+	} else {
+		blueMarker.setPosition(latlng);
 	}
-	blueMarker = new google.maps.Marker({
-		position : latlng,
-		map : map,
-		icon : "img/dot.png"
-	});
+	// console.log("After move " + blueMarker.getPosition());
 }
 
 function removeBlueMarker() {
