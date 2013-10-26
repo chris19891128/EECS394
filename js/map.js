@@ -25,7 +25,11 @@ function initialize() {
 		zoom : 17,
 		mapTypeId : google.maps.MapTypeId.ROADMAP
 	};
+
 	map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+	initSearchBar();
+
 	locatePosition(true);
 
 	directionsDisplay = new google.maps.DirectionsRenderer();
@@ -36,8 +40,22 @@ function initialize() {
 		clearMarkers();
 		addMarker(event.latLng);
 	});
+
 }
 
+function initSearchBar() {
+	var searchInput = document.getElementById("searchBar");
+	var searchBox = new google.maps.places.SearchBox(searchInput);
+	google.maps.event.addListener(searchBox, 'places_changed', function() {
+		var place = searchBox.getPlaces()[0];
+		addMarker(place.geometry.location);
+		var bounds = new google.maps.LatLngBounds();
+		bounds.extend(place.geometry.location);
+		bounds.extend(curLoc);
+		map.fitBounds(bounds);
+		toggleSearchBar();
+	});
+}
 
 function resetAll() {
 	clearMarkers();
