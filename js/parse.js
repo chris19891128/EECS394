@@ -22,19 +22,23 @@ function userInit() {
 
 function oldUser(id) {
 	var query = new Parse.Query(UserProfile);
-	query.get(id,{
-		success : function(u) {
-			user = u;
-		},
-		error : function(u, error) {
-			alert('Failed to retrieve object (does not exist), with error code: '+ error.description);
-		}
-	});
+	query
+			.get(
+					id,
+					{
+						success : function(u) {
+							user = u;
+						},
+						error : function(u, error) {
+							alert('Failed to retrieve object (does not exist), with error code: '
+									+ error.description);
+						}
+					});
 }
 
 function addUser() {
 	user = new UserProfile();
-	user.set("AverageSpeed", 222);
+	user.set("AverageSpeed", defSpeed);
 	var rel = user.relation("History");
 	user.save(null, {
 		success : function(u) {
@@ -48,23 +52,22 @@ function addUser() {
 	});
 }
 
-function saveWalkingSession(orig_lat, orig_lng, dest_lat, dest_lng, dur, avgspd)
-{
+function saveWalkingSession(orig_lat, orig_lng, dest_lat, dest_lng, start_time,
+		end_time) {
 	var ws = new WalkingSession();
-	ws.set("Origin", [orig_lat, orig_lng]);
-	ws.set("Destination", [dest_lat, dest_lng]);
-	ws.set("Duration", dur);
-	ws.set("AverageSpeed", avgspd);
+	ws.set("Origin", [ orig_lat, orig_lng ]);
+	ws.set("Destination", [ dest_lat, dest_lng ]);
+	ws.set("StartTime", start_time);
+	ws.set("EndTime", end_time);
 	ws.set("User", user);
 	ws.save(null, {
 		success : function(w) {
-			
+			var relation = user.relation("History");
+			relation.add(w);
+			user.save();
 		},
 		error : function(w, error) {
 			alert('Failed to save a walking session: ' + error.description);
 		}
 	});
-	var relation = user.relation("History");
-	relation.add(ws);
-	user.save();
 }

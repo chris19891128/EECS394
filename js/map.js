@@ -79,24 +79,23 @@ function locatePosition(isCentered) {
 // Advanced tracking service, used when walking
 
 function trackPosition() {
-	navigator.geolocation.getCurrentPosition(
-			function(position) {
-				console.log("new position " + position.coords.latitude
-						+ " and " + position.coords.longitude);
+	navigator.geolocation.getCurrentPosition(function(position) {
+		console.log("new position " + position.coords.latitude + " and "
+				+ position.coords.longitude);
 
-				var newLat = position.coords.latitude;
-				var newLng = position.coords.longitude;
+		var newLat = position.coords.latitude;
+		var newLng = position.coords.longitude;
 
-				// Logic part
-				updateWalkingInfo(newLat, newLng);
+		// Logic part
+		updateWalkingInfo(newLat, newLng);
 
-				// UI part
-				updateCurrentPositionOnMap(false);
-				//includeDestination();
-				updateSpeedBanner();
-			}, function() {
-				console.error("Error tracking");
-			}, locatingOptions);
+		// UI part
+		updateCurrentPositionOnMap(false);
+		// includeDestination();
+		updateSpeedBanner();
+	}, function() {
+		console.error("Error tracking");
+	}, locatingOptions);
 }
 
 function startTrackingPosition(interval) {

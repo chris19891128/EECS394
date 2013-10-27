@@ -2,7 +2,7 @@ var notifyInterval = 10; // in s
 var updateInterval = 5; // in s
 
 function startWalking() {
-	//changeUrl();
+	// changeUrl();
 	var str = document.getElementById("time").value;
 	if (str == null) {
 		alert("Click on the time setting to add your target time");
@@ -10,7 +10,7 @@ function startWalking() {
 	} else {
 		targetTime = new Date();
 		targetTime.setHours(str.split(":")[0], str.split(":")[1], 0);
-		if(targetTime.getTime() < new Date().getTime()){
+		if (targetTime.getTime() < new Date().getTime()) {
 			alert("Target time is earlier than now. You are already late !");
 			return;
 		}
@@ -34,39 +34,29 @@ function startWalking() {
 	$('#cancel').toggle();
 }
 
-function changeUrl() 
-{ 
-   var url =window.location.href; //获得当前url 
-   var URL=url.toString();
-   alert(URL);
-   if(URL.indexOf("id")==-1){
-	   alert("there is no id!");
-	   var nc=123;//获得一个随机数字 
-	   var newadd="?id="+nc;//加到当前url之后 
-	   url=url+newadd; 
-	   alert(url); 
-	   location.replace(url);//装入这个新的url 
-   }else{
-	   var id=URL.split("id=");
-	   alert(id[1]);
-   }
-   
-} 
-
 function stopWalking() {
-	$('#msg').parent().parent().removeAttr('class');
-	$('#msg').parent().toggle().siblings().toggle();
-	
-	resetAll();
-	
-	resetWalkingSession();
-	stopTrackingPosition();
-	stopRecalRoute();
-	
-	listener = google.maps.event.addListener(map, 'click', function(event) {
-		clearMarkers();
-		addMarker(event.latLng);
-	});
-	
-	location.reload();
+	endWalkingSession();
+
+	// origin , destination , arrival time, start time
+	saveWalkingSession(origin.lat(), origin.lng(), destination.lat(),
+			destination.lng(), startTime, arrivalTime);
+
+	setTimeout(function() {
+		// Clean up everything
+		$('#msg').parent().parent().removeAttr('class');
+		$('#msg').parent().toggle().siblings().toggle();
+
+		resetAll();
+
+		resetWalkingSession();
+		stopTrackingPosition();
+		stopRecalRoute();
+
+		listener = google.maps.event.addListener(map, 'click', function(event) {
+			clearMarkers();
+			addMarker(event.latLng);
+		});
+
+		location.reload();
+	}, 1000);
 }

@@ -1,9 +1,10 @@
 // User inputs
+var origin = null;
 var destination = null;
 var targetTime = null;
 var startTime = null;
-var accDistance = null; // in m, accumulated distance traveled
-var accTime = null; // in s, accumulated time spent
+var arrivalTime = null;
+
 var avgSpeed = null; // in s
 
 // Internal states
@@ -54,21 +55,24 @@ function adjustError() {
 }
 
 function setWalkingSession() {
-	accDistance = 0; // in m, accumulated distance traveled
-	accTime = 0; // in s, accumulated time spent
 	avgSpeed = defSpeed; // in s
+	origin = curLoc;
 	startTime = new Date();
 	curSpeed = 0;
 	inWalk = true;
 }
 
+function endWalkingSession(){
+	arrivalTime = new Date();
+}
+
 function resetWalkingSession() {
 	targetTime = null;
+	origin = null;
 	destination = null;
-	accDistance = null;
-	accTime = null;
 	avgSpeed = null;
 	startTime = null;
+	arrivalTime = null;
 	curSpeed = null;
 	curLoc = null;
 	lastLoc = null;
