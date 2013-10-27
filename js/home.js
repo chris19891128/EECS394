@@ -3,7 +3,6 @@ var updateInterval = 5; // in s
 var estimateTime = 0;
 
 function startWalking() {
-	//changeUrl();
 	var str = document.getElementById("time").value;
 	if (str == null) {
 		alert("Click on the time setting to add your target time");
@@ -116,14 +115,17 @@ function timeToGo()
 		var h=aaa.getHours();
 		var m=aaa.getMinutes();
 		var s=aaa.getSeconds();
-		alert(h+" "+m+" "+s);
+		//alert(h+" "+m+" "+s);
 		if ((h == leaveTime.getHours())&&(m == leaveTime.getMinutes())&&(s == leaveTime.getSeconds()))
 		{
-			alert("it is time to leave!");
+			//alert("it is time to leave!");
 			rightNow = true;
 		}
-		
 	}
+	if(confirm("it is time to leave!"))
+		startWalking();
+	else
+		return false;
 }
 
 

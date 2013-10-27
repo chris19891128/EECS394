@@ -7,7 +7,7 @@ var WalkingSession = Parse.Object.extend("WalkingSession");
 
 var user;
 
-userInit();
+//userInit();
 
 function userInit() {
 	var url = window.location.href.toString();
